@@ -1,0 +1,19 @@
+SYARAT DAN KETENTUAN PROYEK 
+1. Web masih baru, bukan hasil dari web yang sudah ada sebelumnya 
+2. Tema web boleh sama (maximal 5 orang untuk 1 Angkatan) namun isi tetap harus 
+berbeda 
+3. Menerapkan semua teori yang telah didapatkan di praktikum 
+4. Web mampu melakukan fungsi CRUD 
+5. Session dan cookie berfungsi dengan baik 
+6. Error handling 
+7. Bonus untuk web yang dihosting 
+SYARAT DAN KETENTUAN PRESENTASI 
+1. Presentasi dilaksanakan pada pertemuan ke-9 
+2. Praktikan harus mengumpulkan laporan lengkap di LMS H-5 presentasi 
+3. Jika praktikan belum mengumpulkan laporan lengkap maka praktikan tidak boleh 
+presentasi 
+4. Proyek yang sudah dibuat dipublish di masing-masing akun GitHub 
+5. Mengumpulkan file zip code proyek dan link GitHub di LMS H-1 Presentasi 
+6. Jika belum mengumpulkan file/terlambat maka tidak boleh presentasi 
+7. Jika berhalangan hadir/tidak memenuhi syarat presentasi maka boleh presentasi di 
+pertemuan ke-10 namun nilai tidak maksimal lagi
