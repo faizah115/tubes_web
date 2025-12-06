@@ -102,29 +102,7 @@ input[type="text"], input[type="file"] {
     border-radius: 4px; 
 } 
  
-/* Gaya untuk tabel */ 
-table { 
-    width: 100%; 
-    border-collapse: collapse; 
-    margin-bottom: 20px; 
-    background-color: #fff; 
-} 
- 
-table th, table td { 
-    padding: 10px; 
-    text-align: left; 
-    border-bottom: 1px solid #ddd; 
-} 
- 
-table th { 
-    background-color: #333; 
-    color: white; 
-} 
- 
-table img { 
-    border-radius: 4px; 
-} 
- 
+
  
 /* Mengatur desain tombol aksi yang dibuat dengan tag <a> */ 
 .tombol{ 
@@ -137,7 +115,7 @@ table img {
     cursor: pointer; 
 } 
  
-/* Desain tombol edit dan hapus agar lebih kecil*/ 
+/* Desain tombol edit dan hapus */ 
 .tombol.edit, .tombol.hapus{ 
     padding: 10px 15px; 
     font-size: 12px; 
@@ -281,3 +259,32 @@ table th, table td {
     transform: translateY(-5px);
     transition: 0.3s ease;
 }
+
+
+td:nth-child(3) {
+    text-align: justify;
+    max-width: 400px;      
+    white-space: normal;  
+    word-wrap: break-word; 
+}
+
+
+td img {
+    max-width: 300px;
+    height: auto;
+}
+
+
+
+.komentar {
+    text-align: justify;
+    max-width: 400px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.deskripsibuku {
+    flex: 1;                
+    text-align: justify;
+}
+

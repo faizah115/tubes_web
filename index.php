@@ -91,7 +91,7 @@
         <div class="card-body">
             <h5 class="card-title">Filosofi Teras</h5>
             <!-- Tombol menuju halaman review -->
-            <a href="filosofi_teras.html" class="btn btn-dark w-100 mt-2">
+            <a href="filosofi_teras.php" class="btn btn-dark w-100 mt-2">
                 Lihat Detail
             </a>
         </div>
