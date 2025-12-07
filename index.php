@@ -1,6 +1,3 @@
-
-
-
 <?php 
 require "koneksi.php";
 
