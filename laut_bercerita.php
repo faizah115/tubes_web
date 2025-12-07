@@ -44,6 +44,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <h2 class="fw-bold">Laut Bercerita</h2>
     <p class="text-muted">Penulis: Leila S. Chudori.</p>
+                    <td>
+                    <img src="assets/review_lb.jpeg" width="200" class="rounded">
+                </td>
+                 <td>
+                    <img src="assets/laut_bercerita.jpeg" width="200" class="rounded">
+                </td>
     <p class="text-muted">Laut Bercerita adalah sebuah novel yang mengisahkan tentang perjalanan hidup dan pengalaman yang mendalam. Cerita ini membawa pembaca menyelami berbagai emosi dan refleksi tentang kehidupan, kehilangan, dan harapan. Dengan gaya penulisan yang kuat dan penuh makna, Laut Bercerita mengajak kita untuk merenungkan arti sebenarnya dari keberanian dan ketabahan dalam menghadapi tantangan hidup.</p>
 
     <hr>
