@@ -1,4 +1,6 @@
 <?php require "session_check.php"; ?>
+<?php require "koneksi.php"; ?>
+
 
 
 

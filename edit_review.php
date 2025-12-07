@@ -1,5 +1,6 @@
 <?php
 require "koneksi.php";
+require "session_check.php";
 
 if (!isset($_GET["id"])) {
     die("ID review tidak ada!");
@@ -47,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 ?>
 
-
+<?php require "session_check.php"; ?>
 
 
 <!DOCTYPE html>

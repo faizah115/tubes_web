@@ -1,5 +1,6 @@
 <?php
 require "koneksi.php";
+require "session_check.php";
 
 if (!isset($_GET["id"])) {
     die("ID buku tidak ditemukan!");

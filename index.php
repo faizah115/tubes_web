@@ -1,6 +1,7 @@
 <?php
 require "koneksi.php";
-
+require "session_check.php";    
+    
 // Ambil kata pencarian (jika ada)
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
@@ -21,12 +22,6 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 ?>
 
-<?php 
-require "session_check.php"; 
-?>
-
-
-?>
 <!DOCTYPE html>
 <html lang="id">
 
