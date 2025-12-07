@@ -44,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <h2 class="fw-bold">Filosofi Teras</h2>
     <p class="text-muted">Penulis: Henry Manampiring</p>
+    <p class="text-muted">Filosofi Teras (atau Stoikisme) adalah sebuah panduan praktis untuk hidup di dunia modern yang berfokus pada pengendalian diri, ketenangan batin, dan penerimaan terhadap hal-hal yang berada di luar kendali kita. Inti dari filosofi ini, yang dipopulerkan oleh tokoh-tokoh seperti Marcus Aurelius, Seneca, dan Epictetus, mengajarkan bahwa kebahagiaan sejati tidak datang dari kekayaan, status, atau kesenangan eksternal, melainkan dari virtus (kebajikan) dan cara kita merespons peristiwa. Dengan membedakan antara apa yang bisa kita ubah (seperti pikiran dan tindakan kita) dan apa yang tidak bisa kita ubah (seperti pandangan orang lain atau kejadian alam), Filososi Teras membimbing pembaca untuk menjadi lebih tangguh secara emosional, mengurangi kecemasan, dan hidup selaras dengan akal sehat dan alam semesta.</p>
 
     <hr>
 
