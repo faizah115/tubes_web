@@ -1,3 +1,7 @@
+<?php require "session_check.php"; ?>
+
+
+
 <?php
 $server = "localhost";
 $user   = "root";

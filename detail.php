@@ -47,6 +47,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id ORDER BY id DESC");
 ?>
 
+
+<?php require "session_check.php"; ?>
+
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>

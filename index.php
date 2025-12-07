@@ -21,6 +21,10 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 ?>
 
+<?php 
+require "session_check.php"; 
+?>
+
 
 ?>
 <!DOCTYPE html>
@@ -71,10 +75,6 @@ while ($row = mysqli_fetch_assoc($result)) {
             <p class="mt-3 fs-5">
                 Temukan buku favoritmu dan bagikan pengalaman membaca mu
             </p>
-
-            <button class="btn btn-light px-4 py-2 rounded-pill fw-semibold mt-3">
-                Daftar Sekarang
-            </button>
         </div>
     </div>
 </section>
