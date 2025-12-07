@@ -1,7 +1,7 @@
 <?php
 require "koneksi.php";
 
-$sql = "CREATE TABLE reviews_lautbercerita (
+$sql = "CREATE TABLE review_lautbercerita (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nama VARCHAR(255) NOT NULL,
     komentar TEXT NOT NULL,
@@ -10,7 +10,7 @@ $sql = "CREATE TABLE reviews_lautbercerita (
 )";
 
 if (mysqli_query($conn, $sql)) {
-    echo "Tabel reviews_lautbercerita berhasil dibuat!";
+    echo "Tabel review_lautbercerita berhasil dibuat!";
 } else {
     echo "Gagal membuat tabel: " . mysqli_error($conn);
 }

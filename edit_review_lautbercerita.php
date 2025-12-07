@@ -1,38 +1,44 @@
 <?php
 require "koneksi.php";
 
-$id = $_GET["id"];
+// pastikan id ada dan valid
+if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
+    die("ID tidak valid!");
+}
+$id = (int) $_GET["id"];
 
-$result = mysqli_query($conn, "SELECT * FROM reviews_lautbercerita WHERE id=$id");
-$data = mysqli_fetch_assoc($result);
+// ambil data review dengan prepared statement
+$stmt = $conn->prepare("SELECT * FROM review_lautbercerita WHERE id=?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$data = $result->fetch_assoc();
 
 if (!$data) {
     die("Review tidak ditemukan!");
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $nama = $_POST["nama"];
     $komentar = $_POST["komentar"];
     $gambar = $data["gambar"];
 
     // jika upload gambar baru
     if (!empty($_FILES["foto"]["name"])) {
-
         // hapus gambar lama
         if ($gambar && file_exists("uploads/" . $gambar)) {
             unlink("uploads/" . $gambar);
         }
 
         // upload baru
-        $namaFile = uniqid() . "_" . $_FILES["foto"]["name"];
+        $namaFile = uniqid() . "_" . basename($_FILES["foto"]["name"]);
         move_uploaded_file($_FILES["foto"]["tmp_name"], "uploads/" . $namaFile);
         $gambar = $namaFile;
     }
 
-    // update database
+    // update database dengan prepared statement
     $stmt = $conn->prepare("
-        UPDATE reviews_lautbercerita
+        UPDATE review_lautbercerita
         SET nama=?, komentar=?, gambar=?
         WHERE id=?
     ");
@@ -43,7 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -51,7 +56,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <title>Edit Review</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
 <body>
 <div class="container py-5">
     <h3>Edit Review</h3>
@@ -60,21 +64,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div class="col-md-4">
             <label>Nama Pengguna</label>
-            <input type="text" name="nama" value="<?= $data['nama'] ?>" class="form-control" required>
+            <input type="text" name="nama" value="<?= htmlspecialchars($data['nama']) ?>" class="form-control" required>
         </div>
 
         <div class="col-md-4">
             <label>Upload Gambar Baru (Opsional)</label>
             <input type="file" name="foto" class="form-control">
 
-            <?php if ($data["gambar"]): ?>
-                <img src="uploads/<?= $data['gambar'] ?>" width="120" class="mt-2">
+            <?php if (!empty($data["gambar"])): ?>
+                <img src="uploads/<?= htmlspecialchars($data['gambar']) ?>" width="120" class="mt-2">
             <?php endif; ?>
         </div>
 
         <div class="col-12">
             <label>Komentar</label>
-            <textarea name="komentar" class="form-control" rows="3" required><?= $data['komentar'] ?></textarea>
+            <textarea name="komentar" class="form-control" rows="3" required><?= htmlspecialchars($data['komentar']) ?></textarea>
         </div>
 
         <div class="col-12">
@@ -83,7 +87,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
 
     </form>
-
 </div>
 </body>
 </html>

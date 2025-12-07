@@ -2,9 +2,9 @@
 require "koneksi.php";
 
 // Ambil semua review dari database
-$sql = "SELECT * FROM reviews_lautbercerita ORDER BY id DESC";
+$sql = "SELECT * FROM review_lautbercerita ORDER BY id DESC";
 $result = mysqli_query($conn, $sql);
-$reviews = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$review = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 // Jika submit → hanya INSERT (tidak ada edit/delete)
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Masukkan review ke database
     $stmt = $conn->prepare("
-        INSERT INTO reviews_lautbercerita (nama, komentar, gambar)
+        INSERT INTO review_lautbercerita (nama, komentar, gambar)
         VALUES (?, ?, ?)
     ");
     $stmt->bind_param("sss", $nama, $komentar, $gambar);
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <h2 class="fw-bold">Laut Bercerita</h2>
     <p class="text-muted">Penulis: Leila S. Chudori.</p>
-    <p class="text-muted">"Laut Bercerita" adalah sebuah novel fiksi sejarah yang ditulis oleh Leila S. Chudori yang mengisahkan tragedi kelam penghilangan paksa aktivis pro-demokrasi di Indonesia pada masa akhir Orde Baru tahun 1998, diceritakan melalui dua sudut pandang waktu: sebelum dan sesudah peristiwa naas tersebut. Tokoh utama, Bishma Angkasa (yang akrab disapa Laut), adalah seorang mahasiswa aktivis yang diculik dan mengalami penyiksaan keji bersama rekan-rekannya, di mana novel ini dengan gamblang menggambarkan idealisme, persahabatan, serta perjuangan mereka dalam kelompok diskusi bawah tanah bernama Winatra yang ingin menegakkan keadilan dan demokrasi. Selain kisah Laut, novel ini juga menyoroti duka dan pencarian tanpa henti oleh keluarga yang ditinggalkan, terutama sang adik, Kinasih, yang berjuang mencari kejelasan nasib kakaknya yang hilang, membuat novel ini menjadi memoar emosional tentang hilangnya kemanusiaan dan penantian yang tak kunjung usai.</p>
+    <p class="text-muted">Laut Bercerita adalah sebuah novel yang mengisahkan tentang perjalanan hidup dan pengalaman yang mendalam. Cerita ini membawa pembaca menyelami berbagai emosi dan refleksi tentang kehidupan, kehilangan, dan harapan. Dengan gaya penulisan yang kuat dan penuh makna, Laut Bercerita mengajak kita untuk merenungkan arti sebenarnya dari keberanian dan ketabahan dalam menghadapi tantangan hidup.</p>
 
     <hr>
 
@@ -87,12 +87,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </thead>
 
         <tbody>
-        <?php if (empty($reviews)): ?>
+        <?php if (empty($review)): ?>
             <tr>
                 <td colspan="4" class="text-center text-muted">Belum ada review</td>
             </tr>
         <?php else: ?>
-            <?php foreach ($reviews as $r): ?>
+            <?php foreach ($review as $r): ?>
                 <tr>
                     <td><?= htmlspecialchars($r["nama"]) ?></td>
 
