@@ -8,7 +8,7 @@ if (!isset($_GET["id"])) {
 
 $buku_id = intval($_GET["id"]);
 
-
+// Ambil detail buku
 $qBuku = mysqli_query($conn, "SELECT * FROM buku WHERE id = $buku_id");
 $buku = mysqli_fetch_assoc($qBuku);
 
@@ -17,28 +17,38 @@ if (!$buku) {
 }
 
 
+// ======================================
+// PROSES KIRIM REVIEW
+// ======================================
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
     $nama = $_POST["nama"];
     $komentar = $_POST["komentar"];
+    $user_id = $_SESSION["user_id"];
+
+    // Default gambar kosong
     $gambar = "";
 
-    // Upload gambar
+    // Upload gambar jika ada
     if (!empty($_FILES["foto"]["name"])) {
         $namaFile = time() . "_" . $_FILES["foto"]["name"];
         move_uploaded_file($_FILES["foto"]["tmp_name"], "uploads/" . $namaFile);
         $gambar = $namaFile;
     }
 
-    mysqli_query($conn, "
-        INSERT INTO reviews (buku_id, nama, komentar, gambar)
-        VALUES ('$buku_id', '$nama', '$komentar', '$gambar')
-    ");
+    // Simpan komentar ke database
+    $sql = "INSERT INTO reviews (buku_id, user_id, nama, komentar, gambar)
+            VALUES ($buku_id, $user_id, '$nama', '$komentar', '$gambar')";
+
+    mysqli_query($conn, $sql);
 
     header("Location: detail.php?id=" . $buku_id);
     exit;
 }
 
+// ======================================
 // AMBIL SEMUA REVIEW BUKU INI
+// ======================================
 $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id ORDER BY id DESC");
 ?>
 
@@ -54,7 +64,7 @@ $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id O
 
 <div class="container py-5">
 
-    <!--DETAIL BUKU-->
+    <!-- DETAIL BUKU -->
     <div class="row mb-5">
         <div class="col-md-4">
             <img src="assets/<?= $buku['gambar'] ?>" class="img-fluid rounded shadow">
@@ -77,7 +87,7 @@ $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id O
 
     <hr>
 
-    <!--FORM TAMBAH REVIEW -->
+    <!-- FORM TAMBAH REVIEW -->
     <h3 class="fw-bold mt-5 mb-3">Tambah Review</h3>
 
     <form method="POST" enctype="multipart/form-data" class="row g-3 bg-white p-4 rounded shadow-sm">
@@ -100,11 +110,10 @@ $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id O
         <div class="col-12">
             <button class="btn btn-dark px-4">Kirim Review</button>
         </div>
-
     </form>
 
 
-    <!--DAFTAR REVIEW-->
+    <!-- DAFTAR REVIEW -->
     <h3 class="fw-bold mt-5 mb-3">Review Pengguna</h3>
 
     <table class="table table-striped">

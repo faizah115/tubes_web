@@ -295,3 +295,99 @@
 .bottom-text a:hover {
     text-decoration: underline;
 }
+
+/* ====== HALAMAN RIWAYAT KOMENTAR ====== */
+
+body {
+    background: #f2f2f2;
+    font-family: 'Poppins', sans-serif;
+}
+
+.riwayat-container {
+    width: 90%;
+    max-width: 1050px;
+    margin: 40px auto;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 25px;
+}
+
+/* TABLE STYLE */
+.riwayat-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.12);
+}
+
+.riwayat-table thead {
+    background: #1f1f1f;
+    color: white;
+}
+
+.riwayat-table th, 
+.riwayat-table td {
+    padding: 15px 18px;
+    text-align: left;
+    font-size: 15px;
+}
+
+.riwayat-table tbody tr {
+    border-bottom: 1px solid #e2e2e2;
+}
+
+.riwayat-table tbody tr:hover {
+    background: #f7f7f7;
+}
+
+/* IMAGE STYLE */
+.img-mini {
+    width: 120px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.no-img {
+    color: #888;
+}
+
+/* DATE */
+.date-col {
+    font-size: 13px;
+    color: #666;
+    font-style: italic;
+}
+
+/* BUTTON STYLES */
+.btn-edit, 
+.btn-delete {
+    padding: 7px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: white;
+    font-size: 14px;
+}
+
+.btn-edit {
+    background: #333;
+}
+
+.btn-delete {
+    background: #b10000;
+}
+
+.btn-edit:hover,
+.btn-delete:hover {
+    opacity: .8;
+}
+
+/* Align action buttons */
+.action-col a {
+    margin-right: 8px;
+}

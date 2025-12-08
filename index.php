@@ -51,7 +51,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             <div class="collapse navbar-collapse" id="navMenu">
                 <ul class="navbar-nav ms-auto gap-4">
                     <li class="nav-item"><a class="nav-link" href="index.php">Beranda</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Riwayat Komentar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="riwayat_halaman.php">Riwayat Komentar</a></li>
                     <li class="nav-item"><a class="nav-link" href="#daftar-buku">Daftar Buku</a></li>
                 </ul>
             </div>

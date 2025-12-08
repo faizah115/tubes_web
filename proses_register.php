@@ -1,5 +1,8 @@
 <?php
 require "koneksi.php";
+require "session_check.php";
+
+require "koneksi.php";
 
 $username = $_POST['username'];
 $password = $_POST['password'];
