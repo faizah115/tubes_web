@@ -1,29 +1,46 @@
 <?php
 session_start();
+require "koneksi.php";
 
-$username = $_POST['username'];
-$password = $_POST['password'];
+$username = $_POST["username"];
+$password = $_POST["password"];
+$role     = $_POST["role"];
 
-// akun yang boleh login
-$valid_user = "admin";
-$valid_pass = "admin123";
+// LOGIN ADMIN
+if ($role == "admin") {
 
-// cek username
-if ($username !== $valid_user) {
-    header("Location: login.php?error=Username tidak terdaftar");
+    if ($username === "admin" && $password === "admin123") {
+        $_SESSION["login"] = true;
+        $_SESSION["role"] = "admin";
+        header("Location: index.php");
+        exit;
+    } else {
+        header("Location: login.php?role=admin&error=Login admin salah!");
+        exit;
+    }
+}
+
+// LOGIN USER BIASA
+// LOGIN USER BIASA
+$query = mysqli_query($conn, "SELECT * FROM users WHERE username='$username' LIMIT 1");
+
+if (mysqli_num_rows($query) === 1) {
+    $user = mysqli_fetch_assoc($query);
+
+    // Karena password disimpan tanpa hash
+    if ($password === $user["password"]) {
+        $_SESSION["login"] = true;
+        $_SESSION["role"] = "user";
+        $_SESSION["username"] = $username;
+
+        header("Location: index.php");
+        exit;
+    } else {
+        header("Location: login.php?role=user&error=Password salah!");
+        exit;
+    }
+} else {
+    header("Location: login.php?role=user&error=Username tidak terdaftar!");
     exit;
 }
 
-// cek password
-if ($password !== $valid_pass) {
-    header("Location: login.php?error=Password yang dimasukkan salah");
-    exit;
-}
-
-// jika berhasil login
-$_SESSION["login"] = true;
-$_SESSION["username"] = $username;
-
-header("Location: index.php");
-exit;
-?>

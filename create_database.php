@@ -1,22 +1,17 @@
-<?php require "session_check.php"; ?>
-<?php require "koneksi.php"; ?>
-
-
-
-
 <?php
+require "koneksi.php";
+require "session_check.php";    
+
 $server = "localhost";
 $user   = "root";
 $pass   = "";
 
-// 1. Connect ke MySQL tanpa database
 $conn = mysqli_connect($server, $user, $pass);
 
 if (!$conn) {
     die("Koneksi gagal: " . mysqli_connect_error());
 }
 
-// 2. BUAT DATABASE BARU
 $dbname = "bukupedia";
 $sql = "CREATE DATABASE IF NOT EXISTS $dbname";
 
@@ -28,7 +23,6 @@ if (mysqli_query($conn, $sql)) {
 
 mysqli_select_db($conn, $dbname);
 
-// 3. TABEL BUKU
 $sql_buku = "
 CREATE TABLE IF NOT EXISTS buku (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -42,7 +36,6 @@ CREATE TABLE IF NOT EXISTS buku (
 )";
 mysqli_query($conn, $sql_buku);
 
-// 4. TABEL REVIEW
 $sql_review = "
 CREATE TABLE IF NOT EXISTS reviews (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -55,7 +48,6 @@ CREATE TABLE IF NOT EXISTS reviews (
 )";
 mysqli_query($conn, $sql_review);
 
-// 5. INSERT DATA BUKU AWAL
 $sql_insert = "
 INSERT INTO buku (judul, penulis, genre, gambar, halaman_detail, deskripsi) VALUES
 ('Filosofi Teras', 'Henry Manampiring', 'Self Improvement', 'filosofi_teras.jpeg', 'detail.php?id=1', 'Buku Stoikisme modern yang mudah dipahami.'),

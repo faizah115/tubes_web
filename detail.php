@@ -8,9 +8,7 @@ if (!isset($_GET["id"])) {
 
 $buku_id = intval($_GET["id"]);
 
-// ================================
-// AMBIL DETAIL BUKU
-// ================================
+
 $qBuku = mysqli_query($conn, "SELECT * FROM buku WHERE id = $buku_id");
 $buku = mysqli_fetch_assoc($qBuku);
 
@@ -18,9 +16,7 @@ if (!$buku) {
     die("Buku tidak ditemukan!");
 }
 
-// ================================
-// TAMBAH REVIEW
-// ================================
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nama = $_POST["nama"];
     $komentar = $_POST["komentar"];
@@ -42,16 +38,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     exit;
 }
 
-// ================================
 // AMBIL SEMUA REVIEW BUKU INI
-// ================================
 $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id ORDER BY id DESC");
 ?>
-
-
-<?php require "session_check.php"; ?>
-
-
 
 <!DOCTYPE html>
 <html lang="id">
@@ -65,9 +54,7 @@ $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id O
 
 <div class="container py-5">
 
-    <!-- =======================
-         DETAIL BUKU
-    ======================== -->
+    <!--DETAIL BUKU-->
     <div class="row mb-5">
         <div class="col-md-4">
             <img src="assets/<?= $buku['gambar'] ?>" class="img-fluid rounded shadow">
@@ -90,9 +77,7 @@ $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id O
 
     <hr>
 
-    <!-- =======================
-         FORM TAMBAH REVIEW
-    ======================== -->
+    <!--FORM TAMBAH REVIEW -->
     <h3 class="fw-bold mt-5 mb-3">Tambah Review</h3>
 
     <form method="POST" enctype="multipart/form-data" class="row g-3 bg-white p-4 rounded shadow-sm">
@@ -119,9 +104,7 @@ $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id O
     </form>
 
 
-    <!-- =======================
-         DAFTAR REVIEW
-    ======================== -->
+    <!--DAFTAR REVIEW-->
     <h3 class="fw-bold mt-5 mb-3">Review Pengguna</h3>
 
     <table class="table table-striped">

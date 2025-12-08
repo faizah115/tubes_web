@@ -202,3 +202,96 @@
     border-radius: 6px;
 }
 
+
+/* =========================== */
+/* BACKGROUND LOGIN & REGISTER */
+/* =========================== */
+
+/* ====== FULL SCREEN LOGIN BACKGROUND ====== */
+.login-body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;                    /* isi full layar */
+    display: flex;
+    justify-content: center;          /* center horizontal */
+    align-items: center;              /* center vertical */
+    background: linear-gradient(135deg, #000000, #1a1a1a, #2d2d2d);
+    font-family: "Poppins", sans-serif;
+}
+
+/* ====== LOGIN CARD ====== */
+.login-container {
+    width: 420px;
+    padding: 40px 35px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+    text-align: center;
+}
+
+/* Judul Login */
+.login-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #111;
+}
+
+.login-subtitle {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+/* Alert Error */
+.alert-error {
+    background: #ffe0e0;
+    color: #d10000;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/* Input */
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    outline: none;
+}
+
+/* Tombol Login */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background: #000000;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.25s;
+}
+
+.btn-login:hover {
+    background: #333333;
+}
+
+/* Tulisan bawah */
+.bottom-text {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.bottom-text a {
+    color: #6a00ff;
+    text-decoration: none;
+}
+
+.bottom-text a:hover {
+    text-decoration: underline;
+}
