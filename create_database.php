@@ -1,17 +1,32 @@
 <?php
+/* -------------------------------------------------------
+   IMPORT: koneksi database utama & pengecekan session login
+-------------------------------------------------------- */
 require "koneksi.php";
 require "session_check.php";    
 
+
+/* -------------------------------------------------------
+   KONFIGURASI KONEKSI MANUAL KE SERVER MYSQL
+   (dipakai khusus untuk CREATE DATABASE)
+-------------------------------------------------------- */
 $server = "localhost";
 $user   = "root";
 $pass   = "";
 
+/* -------------------------------------------------------
+   MEMBUKA KONEKSI KE SERVER MYSQL TANPA MEMILIH DATABASE
+-------------------------------------------------------- */
 $conn = mysqli_connect($server, $user, $pass);
 
 if (!$conn) {
     die("Koneksi gagal: " . mysqli_connect_error());
 }
 
+
+/* -------------------------------------------------------
+   MEMBUAT DATABASE "bukupedia" JIKA BELUM ADA
+-------------------------------------------------------- */
 $dbname = "bukupedia";
 $sql = "CREATE DATABASE IF NOT EXISTS $dbname";
 
@@ -21,8 +36,16 @@ if (mysqli_query($conn, $sql)) {
     die("Gagal membuat database: " . mysqli_error($conn));
 }
 
+
+/* -------------------------------------------------------
+   MEMILIH DATABASE "bukupedia" UNTUK DIGUNAKAN
+-------------------------------------------------------- */
 mysqli_select_db($conn, $dbname);
 
+
+/* -------------------------------------------------------
+   MEMBUAT TABEL "buku" (menyimpan data buku)
+-------------------------------------------------------- */
 $sql_buku = "
 CREATE TABLE IF NOT EXISTS buku (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -36,6 +59,10 @@ CREATE TABLE IF NOT EXISTS buku (
 )";
 mysqli_query($conn, $sql_buku);
 
+
+/* -------------------------------------------------------
+   MEMBUAT TABEL "reviews" (menyimpan komentar pengguna)
+-------------------------------------------------------- */
 $sql_review = "
 CREATE TABLE IF NOT EXISTS reviews (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -48,6 +75,11 @@ CREATE TABLE IF NOT EXISTS reviews (
 )";
 mysqli_query($conn, $sql_review);
 
+
+/* -------------------------------------------------------
+   MENGISI DATA AWAL KE TABEL BUKU
+   (empat contoh buku default untuk aplikasi)
+-------------------------------------------------------- */
 $sql_insert = "
 INSERT INTO buku (judul, penulis, genre, gambar, halaman_detail, deskripsi) VALUES
 ('Filosofi Teras', 'Henry Manampiring', 'Self Improvement', 'filosofi_teras.jpeg', 'detail.php?id=1', 'Buku Stoikisme modern yang mudah dipahami.'),
@@ -58,6 +90,10 @@ INSERT INTO buku (judul, penulis, genre, gambar, halaman_detail, deskripsi) VALU
 
 mysqli_query($conn, $sql_insert);
 
+
+/* -------------------------------------------------------
+   PESAN TAMBAHAN & MENUTUP KONEKSI
+-------------------------------------------------------- */
 echo "<br>Semua tabel sudah dibuat dan data awal sudah dimasukkan.";
 
 mysqli_close($conn);

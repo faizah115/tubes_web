@@ -1,18 +1,23 @@
 <?php
+/* ============================================================
+   IMPORT FILE: CEK SESSION LOGIN & KONEKSI DATABASE
+   Pastikan pengguna sudah login dan database tersedia
+============================================================ */
 require "session_check.php";
 require "koneksi.php";
 
-/*
- | =====================================================
- |  CEK APAKAH ADMIN ATAU USER
- | =====================================================
-*/
+/* ============================================================
+   CEK ROLE (ADMIN / USER)
+   Admin dapat melihat SEMUA review
+   User hanya melihat review miliknya sendiri
+============================================================ */
 
-// Jika admin login → tampilkan SEMUA review
+// Jika yang login adalah ADMIN → tampilkan seluruh review dari semua user
 if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
 
-    $title = "Semua Riwayat Komentar";
+    $title = "Semua Riwayat Komentar"; // judul halaman untuk admin
 
+    // Query untuk mengambil semua review + nama user + judul buku
     $sql = "
         SELECT reviews.*, buku.judul, users.username 
         FROM reviews
@@ -22,11 +27,14 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
     ";
     $result = mysqli_query($conn, $sql);
 
-// Jika user biasa → hanya tampilkan riwayat miliknya
 } else {
+    /* ----------------------------------------------------------
+       Jika USER biasa login → tampilkan hanya review miliknya
+    -----------------------------------------------------------*/
 
-    $username = $_SESSION["username"];
+    $username = $_SESSION["username"]; // ambil username dari session
 
+    // Ambil ID user berdasarkan username
     $user_q = mysqli_query($conn, "SELECT id FROM users WHERE username='$username' LIMIT 1");
     $user = mysqli_fetch_assoc($user_q);
 
@@ -35,9 +43,9 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
     }
 
     $user_id = $user["id"];
+    $title = "Riwayat Komentar Anda"; // judul halaman untuk user
 
-    $title = "Riwayat Komentar Anda";
-
+    // Query: ambil hanya review yang dimiliki user tersebut
     $sql = "
         SELECT reviews.*, buku.judul
         FROM reviews
@@ -47,22 +55,28 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
     ";
     $result = mysqli_query($conn, $sql);
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+
+    <!-- Judul halaman menyesuaikan apakah admin atau user -->
     <title><?= $title ?></title>
+
+    <!-- File CSS untuk styling riwayat -->
     <link rel="stylesheet" href="CSS/riwayat.css">
 </head>
 
 <body>
 
+<!-- Container utama halaman riwayat komentar -->
 <div class="riwayat-container">
 
+    <!-- Judul halaman -->
     <h2 class="title"><?= $title ?></h2>
 
+    <!-- Tabel berisi daftar komentar / review -->
     <table class="riwayat-table">
         <thead>
             <tr>
@@ -77,14 +91,17 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
 
         <tbody>
 
+        <!-- Loop semua data review yang diambil dari database -->
         <?php while ($r = mysqli_fetch_assoc($result)): ?>
             <tr>
 
+                <!-- Judul buku yang direview -->
                 <td><?= $r['judul'] ?></td>
 
-                <!-- tampilkan nama user jika admin -->
+                <!-- Nama user (admin bisa lihat semua, user biasa ditampilkan '-') -->
                 <td><?= $r["username"] ?? "-" ?></td>
 
+                <!-- Foto yang diupload user (jika ada) -->
                 <td>
                     <?php if (!empty($r["gambar"])): ?>
                         <img src="uploads/<?= $r['gambar'] ?>" class="img-mini">
@@ -93,12 +110,15 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
                     <?php endif; ?>
                 </td>
 
+                <!-- Komentar user -->
                 <td><?= nl2br($r['komentar']) ?></td>
 
+                <!-- Tanggal komentar dikirim -->
                 <td class="date-col">
                     <?= $r['created_at'] ?? '-' ?>
                 </td>
 
+                <!-- Tombol Edit & Delete -->
                 <td class="action-col">
                     <a href="edit_review.php?id=<?= $r['id'] ?>" class="btn-edit">Edit</a>
                     <a href="delete_review.php?id=<?= $r['id'] ?>" class="btn-delete"

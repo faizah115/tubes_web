@@ -1,6 +1,4 @@
-/* ------------------------------
-   GLOBAL STYLE
---------------------------------*/
+/* Styling dasar untuk body halaman */
 body {
     font-family: 'Poppins', sans-serif;
     background: #f5f5f5;
@@ -8,6 +6,7 @@ body {
     padding: 0;
 }
 
+/* Container utama yang membungkus seluruh isi riwayat */
 .riwayat-container {
     width: 90%;
     max-width: 1100px;
@@ -18,15 +17,14 @@ body {
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
+/* Judul besar pada halaman riwayat komentar */
 .title {
     font-size: 26px;
     margin-bottom: 20px;
     font-weight: 600;
 }
 
-/* ------------------------------
-   TABLE STYLE
---------------------------------*/
+/* Tabel utama yang menampilkan daftar komentar */
 .riwayat-table {
     width: 100%;
     border-collapse: collapse;
@@ -34,6 +32,7 @@ body {
     background: #fff;
 }
 
+/* Header tabel (Judul Buku, Foto, Komentar, dll) */
 .riwayat-table th {
     background: #1f1f1f;
     color: white;
@@ -42,13 +41,14 @@ body {
     font-size: 15px;
 }
 
+/* Sel (kolom) dalam tabel */
 .riwayat-table td {
     padding: 12px;
     border-bottom: 1px solid #ddd;
     vertical-align: middle;
 }
 
-/* Foto mini */
+/* Gambar mini di kolom review */
 .img-mini {
     width: 120px;
     height: auto;
@@ -56,13 +56,12 @@ body {
     object-fit: cover;
 }
 
+/* Teks jika tidak ada gambar */
 .no-img {
     color: #777;
 }
 
-/* ------------------------------
-   ACTION BUTTONS
---------------------------------*/
+/* Tombol edit pada kolom aksi */
 .btn-edit {
     background: #f1c40f;
     color: #000;
@@ -75,10 +74,12 @@ body {
     transition: 0.2s;
 }
 
+/* Efek hover untuk tombol edit */
 .btn-edit:hover {
     background: #d4ac0d;
 }
 
+/* Tombol delete pada kolom aksi */
 .btn-delete {
     background: #e74c3c;
     color: #fff;
@@ -90,15 +91,17 @@ body {
     transition: 0.2s;
 }
 
+/* Efek hover untuk tombol delete */
 .btn-delete:hover {
     background: #c0392b;
 }
 
-/* Kolom aksi agar rapi */
+/* Kolom aksi agar tombol berada dalam satu baris */
 .action-col {
     white-space: nowrap;
 }
 
+/* Kolom tanggal komentar */
 .date-col {
     font-size: 14px;
     color: #555;
