@@ -42,7 +42,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="index.php">Buku Kita</a>
+            <a class="navbar-brand fw-bold fs-4" href="index.php">Buku Pedia</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
                 <span class="navbar-toggler-icon"></span>
@@ -64,7 +64,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     <div class="container">
         <div class="hero-text-left text-white">
-            <h1 class="fw-bold display-3">Forum Diskusi Buku</h1>
+            <h1 class="fw-bold display-3">Forum Review Buku</h1>
             <h1 class="fw-bold display-3">Bagikan pengalaman mu</h1>
 
             <p class="mt-3 fs-5">
@@ -78,8 +78,8 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     <!-- BENEFITS -->
     <section class="text-center py-5">
-        <h2 class="fw-bold">Mengapa Bergabung dengan BukuKita? </h2>
-        <p class="text-muted">Dapatkan inspirasi dan wawasan baru dari setiap ulasan di BukuKita</p>
+        <h2 class="fw-bold">Mengapa Bergabung dengan BukuPedia? </h2>
+        <p class="text-muted">Dapatkan inspirasi dan wawasan baru dari setiap ulasan di BukuPedia</p>
 
 
         <h2 class="fw-bold text-center mb-4">Pilih buku kamu!</h2>
@@ -124,22 +124,21 @@ while ($row = mysqli_fetch_assoc($result)) {
             <div class="row g-4">
 
                 <?php foreach ($books as $b): ?>
-                    <div class="col-md-3">
-                        <div class="card shadow-sm border-0 h-100">
+<div class="col-md-3">
+    <div class="card shadow-sm border-0 h-100 book-card">
 
-                            <img src="assets/<?= $b['gambar'] ?>" class="card-img-top">
+        <img src="assets/<?= $b['gambar'] ?>" class="card-img-top">
 
-                            <div class="card-body">
-                                <h5 class="card-title"><?= $b['judul'] ?></h5>
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title book-title"><?= $b['judul'] ?></h5>
 
-                                <!-- DETAIL SEKARANG MENGGUNAKAN ID -->
-                                <a href="detail.php?id=<?= $b['id'] ?>" class="btn btn-dark w-100 mt-2">
-                                    Lihat Detail
-                                </a>
-                            </div>
+            <a href="detail.php?id=<?= $b['id'] ?>" class="btn btn-dark w-100 mt-auto btn-detail">
+                Lihat Detail
+            </a>
+        </div>
 
-                        </div>
-                    </div>
+    </div>
+</div>
                 <?php endforeach; ?>
 
             </div>
@@ -148,7 +147,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     </section>
 
     <footer class="bg-dark text-white text-center py-3">
-        © 2025 BukuKita. All rights reserved.
+        © 2025 BukuPedia. All rights reserved.
     </footer>
 
 </body>

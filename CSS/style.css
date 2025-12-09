@@ -90,7 +90,7 @@
     width: 100%;
     padding: 12px 45px;
     border-radius: 30px;
-    border: 1.5px solid #4683b7;
+    border: 1.5px solid #1a8cef;
     font-size: 16px;
     transition: 0.3s ease;
     outline: none;
@@ -101,16 +101,7 @@
     box-shadow: 0 0 8px rgba(0,0,0,0.1);
 }
 
-.search-icon {
-    position: absolute;
-    top: 50%;
-    left: 15px;
-    transform: translateY(-50%);
-    font-size: 20px;
-    color: #666;
-}
 
-/* Required for Bootstrap Icons */
 
 /* Aesthetic background */
 .login-body {
@@ -202,24 +193,19 @@
     border-radius: 6px;
 }
 
-
-/* =========================== */
 /* BACKGROUND LOGIN & REGISTER */
-/* =========================== */
-
-/* ====== FULL SCREEN LOGIN BACKGROUND ====== */
 .login-body {
     margin: 0;
     padding: 0;
-    height: 100vh;                    /* isi full layar */
+    height: 100vh;                   
     display: flex;
-    justify-content: center;          /* center horizontal */
-    align-items: center;              /* center vertical */
+    justify-content: center;          
+    align-items: center;              
     background: linear-gradient(135deg, #000000, #1a1a1a, #2d2d2d);
     font-family: "Poppins", sans-serif;
 }
 
-/* ====== LOGIN CARD ====== */
+/*  LOGIN CARD  */
 .login-container {
     width: 420px;
     padding: 40px 35px;
@@ -296,98 +282,29 @@
     text-decoration: underline;
 }
 
-/* ====== HALAMAN RIWAYAT KOMENTAR ====== */
 
-body {
-    background: #f2f2f2;
-    font-family: 'Poppins', sans-serif;
+/* ======== CARD BUKU FIX ======== */
+.book-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
-.riwayat-container {
-    width: 90%;
-    max-width: 1050px;
-    margin: 40px auto;
+/* Samakan tinggi gambar */
+.card-img-top {
+    height: 350px;
+    object-fit: cover;
 }
 
-.title {
-    font-size: 28px;
-    font-weight: 600;
-    color: #111;
-    margin-bottom: 25px;
+/* Samakan tinggi judul */
+.book-title {
+    min-height: 55px;      /* sesuaikan jika terlalu sempit */
+    display: flex;
+    align-items: center;
 }
 
-/* TABLE STYLE */
-.riwayat-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 5px 18px rgba(0,0,0,0.12);
+/* Taruh tombol di bawah */
+.btn-detail {
+    margin-top: auto;
 }
 
-.riwayat-table thead {
-    background: #1f1f1f;
-    color: white;
-}
-
-.riwayat-table th, 
-.riwayat-table td {
-    padding: 15px 18px;
-    text-align: left;
-    font-size: 15px;
-}
-
-.riwayat-table tbody tr {
-    border-bottom: 1px solid #e2e2e2;
-}
-
-.riwayat-table tbody tr:hover {
-    background: #f7f7f7;
-}
-
-/* IMAGE STYLE */
-.img-mini {
-    width: 120px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
-
-.no-img {
-    color: #888;
-}
-
-/* DATE */
-.date-col {
-    font-size: 13px;
-    color: #666;
-    font-style: italic;
-}
-
-/* BUTTON STYLES */
-.btn-edit, 
-.btn-delete {
-    padding: 7px 14px;
-    border-radius: 6px;
-    text-decoration: none;
-    color: white;
-    font-size: 14px;
-}
-
-.btn-edit {
-    background: #333;
-}
-
-.btn-delete {
-    background: #b10000;
-}
-
-.btn-edit:hover,
-.btn-delete:hover {
-    opacity: .8;
-}
-
-/* Align action buttons */
-.action-col a {
-    margin-right: 8px;
-}
