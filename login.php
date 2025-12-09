@@ -45,7 +45,15 @@ $role = $_GET["role"] ?? "user";
                     <input type="password" name="password" placeholder="Password" required>
                 </div>
 
+                <div class="form-check mt-3">
+                    <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                    <label class="form-check-label" for="remember">
+                        Remember Me
+                    </label>
+                </div>
+
                 <button type="submit" class="btn-login">Login</button>
+
             </form>
 
             <!-- Navigasi -->

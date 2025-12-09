@@ -10,6 +10,14 @@ if (!isset($_SESSION['username'])) {
 // Timeout 1000 detik
 $timeout = 1000;
 
+if (!isset($_SESSION['login']) && isset($_COOKIE['remember_username'])) {
+    $_SESSION['login'] = true;
+    $_SESSION['username'] = $_COOKIE['remember_username'];
+    $_SESSION['role'] = $_COOKIE['remember_role'];
+}
+
+
+
 // Jika belum ada waktu aktivitas, set sekarang
 if (!isset($_SESSION['last_activity'])) {
     $_SESSION['last_activity'] = time();

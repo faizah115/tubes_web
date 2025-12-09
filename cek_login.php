@@ -6,43 +6,51 @@ $username = $_POST["username"];
 $password = $_POST["password"];
 $role = $_POST["role"];
 
-// ====== LOGIN ADMIN ======
+// LOGIN ADMIN
 if ($role == "admin") {
     if ($username === "admin" && $password === "admin123") {
+
         $_SESSION["login"] = true;
         $_SESSION["role"] = "admin";
         $_SESSION["username"] = "admin";
 
+        // REMEMBER ME ADMIN TANPA DATABASE
+        if (isset($_POST['remember'])) {
+            $expire = time() + 120;
+
+            setcookie("remember_username", "admin", $expire, "/", "", false, true);
+            setcookie("remember_role", "admin", $expire, "/", "", false, true);
+        }
+
         header("Location: index.php");
-        exit;
-    } else {
-        header("Location: login.php?role=admin&error=Login admin salah!");
         exit;
     }
 }
 
-// ====== LOGIN USER BIASA ======
+// LOGIN USER BIASA
 // LOGIN USER BIASA
 $query = mysqli_query($conn, "SELECT * FROM users WHERE username='$username' LIMIT 1");
 
 if (mysqli_num_rows($query) === 1) {
     $user = mysqli_fetch_assoc($query);
 
-    // Jika password tersimpan dalam bentuk hash
-    if (password_verify($password, $user["password"])) {
-        $_SESSION["login"] = true;
-        $_SESSION["role"] = "user";
-        $_SESSION["username"] = $username;
-        $_SESSION["user_id"] = $user["id"]; 
-        header("Location: index.php");
-        exit;
+    // cek password (hashed atau plain text)
+    $validPassword = password_verify($password, $user["password"]) || $password === $user["password"];
 
-    // Jika password tidak di-hash (plain text)
-    } elseif ($password === $user["password"]) {
+    if ($validPassword) {
+
         $_SESSION["login"] = true;
         $_SESSION["role"] = "user";
         $_SESSION["username"] = $username;
-        $_SESSION["user_id"] = $user["id"];
+
+        // REMEMBER ME TANPA DATABASE
+        if (isset($_POST['remember'])) {
+            $expire = time() + 120;
+
+            setcookie("remember_username", $username, $expire, "/", "", false, true);
+            setcookie("remember_role", "user", $expire, "/", "", false, true);
+        }
+
         header("Location: index.php");
         exit;
 
@@ -50,8 +58,8 @@ if (mysqli_num_rows($query) === 1) {
         header("Location: login.php?role=user&error=Password salah!");
         exit;
     }
+
 } else {
-    header("Location: login.php?role=user&error=Username tidak terdaftar!");
+    header("Location: login.php?role=user&error=Username tidak ditemukan!");
     exit;
 }
-
