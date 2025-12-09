@@ -54,6 +54,7 @@ WEBSITE_FORM_DISKUSI_BUKU
 ├─ koneksi.php
 ├─ login.php
 ├─ logout.php
+├─ project-tree.md
 ├─ proses_register.php
 ├─ register.php
 ├─ riwayat.php
@@ -62,8 +63,6 @@ WEBSITE_FORM_DISKUSI_BUKU
 ├─ session_check.php
 └─ uploads
    ├─ 1765244639_review_lb.jpeg
-   ├─ 1765244915_review_lb.jpeg
-   ├─ 1765247149_review_cantikituluka.jpeg
-   └─ 6937afd7a821f_Atomic Habits.jpeg
+   └─ 1765244915_review_lb.jpeg
 
 ```
