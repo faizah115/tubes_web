@@ -7,8 +7,8 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-// Timeout 500 detik
-$timeout = 500;
+// Timeout 1000 detik
+$timeout = 1000;
 
 // Jika belum ada waktu aktivitas, set sekarang
 if (!isset($_SESSION['last_activity'])) {

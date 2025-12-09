@@ -2,29 +2,58 @@
 require "session_check.php";
 require "koneksi.php";
 
-$username = $_SESSION["username"];
+/*
+ | =====================================================
+ |  CEK APAKAH ADMIN ATAU USER
+ | =====================================================
+*/
 
-// Ambil ID user
-$user_q = mysqli_query($conn, "SELECT id FROM users WHERE username='$username' LIMIT 1");
-$user = mysqli_fetch_assoc($user_q);
-$user_id = $user["id"];
+// Jika admin login → tampilkan SEMUA review
+if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
 
-// Ambil riwayat komentar user
-$sql = "
-    SELECT reviews.*, buku.judul 
-    FROM reviews
-    LEFT JOIN buku ON reviews.buku_id = buku.id
-    WHERE reviews.user_id = $user_id
-    ORDER BY reviews.id DESC
-";
-$result = mysqli_query($conn, $sql);
+    $title = "Semua Riwayat Komentar";
+
+    $sql = "
+        SELECT reviews.*, buku.judul, users.username 
+        FROM reviews
+        LEFT JOIN buku ON reviews.buku_id = buku.id
+        LEFT JOIN users ON users.id = reviews.user_id
+        ORDER BY reviews.id DESC
+    ";
+    $result = mysqli_query($conn, $sql);
+
+// Jika user biasa → hanya tampilkan riwayat miliknya
+} else {
+
+    $username = $_SESSION["username"];
+
+    $user_q = mysqli_query($conn, "SELECT id FROM users WHERE username='$username' LIMIT 1");
+    $user = mysqli_fetch_assoc($user_q);
+
+    if (!$user) {
+        die("User tidak ditemukan!");
+    }
+
+    $user_id = $user["id"];
+
+    $title = "Riwayat Komentar Anda";
+
+    $sql = "
+        SELECT reviews.*, buku.judul
+        FROM reviews
+        LEFT JOIN buku ON reviews.buku_id = buku.id
+        WHERE reviews.user_id = $user_id
+        ORDER BY reviews.id DESC
+    ";
+    $result = mysqli_query($conn, $sql);
+}
+
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Riwayat Komentar Anda</title>
+    <title><?= $title ?></title>
     <link rel="stylesheet" href="CSS/riwayat.css">
 </head>
 
@@ -32,12 +61,13 @@ $result = mysqli_query($conn, $sql);
 
 <div class="riwayat-container">
 
-    <h2 class="title">Riwayat Komentar Anda</h2>
+    <h2 class="title"><?= $title ?></h2>
 
     <table class="riwayat-table">
         <thead>
             <tr>
                 <th>Judul Buku</th>
+                <th>Nama User</th>
                 <th>Foto</th>
                 <th>Komentar</th>
                 <th>Dikirim</th>
@@ -49,10 +79,12 @@ $result = mysqli_query($conn, $sql);
 
         <?php while ($r = mysqli_fetch_assoc($result)): ?>
             <tr>
-                <!-- judul buku -->
+
                 <td><?= $r['judul'] ?></td>
 
-                <!-- foto -->
+                <!-- tampilkan nama user jika admin -->
+                <td><?= $r["username"] ?? "-" ?></td>
+
                 <td>
                     <?php if (!empty($r["gambar"])): ?>
                         <img src="uploads/<?= $r['gambar'] ?>" class="img-mini">
@@ -61,20 +93,18 @@ $result = mysqli_query($conn, $sql);
                     <?php endif; ?>
                 </td>
 
-                <!-- komentar -->
                 <td><?= nl2br($r['komentar']) ?></td>
 
-                <!-- tanggal -->
                 <td class="date-col">
                     <?= $r['created_at'] ?? '-' ?>
                 </td>
 
-                <!-- aksi -->
                 <td class="action-col">
                     <a href="edit_review.php?id=<?= $r['id'] ?>" class="btn-edit">Edit</a>
                     <a href="delete_review.php?id=<?= $r['id'] ?>" class="btn-delete"
                        onclick="return confirm('Hapus komentar ini?')">Delete</a>
                 </td>
+
             </tr>
         <?php endwhile; ?>
 

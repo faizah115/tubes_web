@@ -53,6 +53,13 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <li class="nav-item"><a class="nav-link" href="index.php">Beranda</a></li>
                     <li class="nav-item"><a class="nav-link" href="riwayat_halaman.php">Riwayat Komentar</a></li>
                     <li class="nav-item"><a class="nav-link" href="#daftar-buku">Daftar Buku</a></li>
+                    <li class="nav-item">
+                    <a href="logout.php" class="nav-link text-danger"
+                     onclick="return confirm('Apakah Anda yakin ingin keluar?')">
+                     Keluar
+    </a>
+</li>
+
                 </ul>
             </div>
         </div>

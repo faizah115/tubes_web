@@ -7,9 +7,8 @@ if (!isset($_GET["id"])) {
 }
 
 $id = intval($_GET["id"]);
-$buku_id = intval($_GET["buku_id"]);
 
-// Ambil data review
+// Ambil data review (untuk mengetahui buku_id juga)
 $q = $conn->prepare("SELECT * FROM reviews WHERE id=?");
 $q->bind_param("i", $id);
 $q->execute();
@@ -19,15 +18,23 @@ if (!$data) {
     die("Review tidak ditemukan!");
 }
 
+// Ambil buku_id dari URL atau fallback dari database
+$buku_id = isset($_GET["buku_id"]) ? intval($_GET["buku_id"]) : $data["buku_id"];
+
+
+// =======================================
+// UPDATE REVIEW
+// =======================================
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $nama = $_POST["nama"];
     $komentar = $_POST["komentar"];
     $gambar = $data["gambar"];
 
-    // Upload gambar baru
+    // Upload foto baru
     if (!empty($_FILES["foto"]["name"])) {
 
+        // Hapus foto lama jika ada
         if ($gambar && file_exists("uploads/" . $gambar)) {
             unlink("uploads/" . $gambar);
         }
@@ -38,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $gambar = $newName;
     }
 
-    // Update data
+    // Update database
     $update = $conn->prepare("UPDATE reviews SET nama=?, komentar=?, gambar=? WHERE id=?");
     $update->bind_param("sssi", $nama, $komentar, $gambar, $id);
     $update->execute();
@@ -47,9 +54,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     exit;
 }
 ?>
-
-<?php require "session_check.php"; ?>
-
 
 <!DOCTYPE html>
 <html>
@@ -73,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <input type="file" name="foto" class="form-control">
 
         <?php if ($data["gambar"]): ?>
-            <img src="uploads/<?= $data['gambar'] ?>" width="120" class="mt-2">
+            <img src="uploads/<?= $data['gambar'] ?>" width="120" class="mt-2 rounded">
         <?php endif; ?>
     </div>
 

@@ -22,23 +22,25 @@ if (!$buku) {
 // ======================================
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $nama = $_POST["nama"];
-    $komentar = $_POST["komentar"];
+    // Amankan input dari kutip & karakter berbahaya
+    $nama = mysqli_real_escape_string($conn, $_POST["nama"]);
+    $komentar = mysqli_real_escape_string($conn, $_POST["komentar"]);
     $user_id = $_SESSION["user_id"];
 
-    // Default gambar kosong
     $gambar = "";
 
     // Upload gambar jika ada
     if (!empty($_FILES["foto"]["name"])) {
         $namaFile = time() . "_" . $_FILES["foto"]["name"];
         move_uploaded_file($_FILES["foto"]["tmp_name"], "uploads/" . $namaFile);
-        $gambar = $namaFile;
+        $gambar = mysqli_real_escape_string($conn, $namaFile);
     }
 
-    // Simpan komentar ke database
-    $sql = "INSERT INTO reviews (buku_id, user_id, nama, komentar, gambar)
-            VALUES ($buku_id, $user_id, '$nama', '$komentar', '$gambar')";
+    // Query aman
+    $sql = "
+        INSERT INTO reviews (buku_id, user_id, nama, komentar, gambar)
+        VALUES ($buku_id, $user_id, '$nama', '$komentar', '$gambar')
+    ";
 
     mysqli_query($conn, $sql);
 
