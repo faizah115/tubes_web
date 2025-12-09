@@ -12,7 +12,6 @@ require "koneksi.php";
    User hanya melihat review miliknya sendiri
 ============================================================ */
 
-// Jika yang login adalah ADMIN → tampilkan seluruh review dari semua user
 if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
 
     $title = "Semua Riwayat Komentar"; // judul halaman untuk admin
@@ -32,9 +31,8 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
        Jika USER biasa login → tampilkan hanya review miliknya
     -----------------------------------------------------------*/
 
-    $username = $_SESSION["username"]; // ambil username dari session
+    $username = $_SESSION["username"]; 
 
-    // Ambil ID user berdasarkan username
     $user_q = mysqli_query($conn, "SELECT id FROM users WHERE username='$username' LIMIT 1");
     $user = mysqli_fetch_assoc($user_q);
 
@@ -43,9 +41,8 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
     }
 
     $user_id = $user["id"];
-    $title = "Riwayat Komentar Anda"; // judul halaman untuk user
+    $title = "Riwayat Komentar Anda"; 
 
-    // Query: ambil hanya review yang dimiliki user tersebut
     $sql = "
         SELECT reviews.*, buku.judul
         FROM reviews
@@ -60,20 +57,13 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-
-    <!-- Judul halaman menyesuaikan apakah admin atau user -->
     <title><?= $title ?></title>
-
-    <!-- File CSS untuk styling riwayat -->
     <link rel="stylesheet" href="CSS/riwayat.css">
 </head>
-
 <body>
 
-<!-- Container utama halaman riwayat komentar -->
-<div class="riwayat-container">
 
-    <!-- Judul halaman -->
+<div class="riwayat-container">
     <h2 class="title"><?= $title ?></h2>
 
     <!-- Tabel berisi daftar komentar / review -->
@@ -90,18 +80,10 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
         </thead>
 
         <tbody>
-
-        <!-- Loop semua data review yang diambil dari database -->
         <?php while ($r = mysqli_fetch_assoc($result)): ?>
             <tr>
-
-                <!-- Judul buku yang direview -->
                 <td><?= $r['judul'] ?></td>
-
-                <!-- Nama user (admin bisa lihat semua, user biasa ditampilkan '-') -->
                 <td><?= $r["username"] ?? "-" ?></td>
-
-                <!-- Foto yang diupload user (jika ada) -->
                 <td>
                     <?php if (!empty($r["gambar"])): ?>
                         <img src="uploads/<?= $r['gambar'] ?>" class="img-mini">
@@ -109,11 +91,7 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
                         <span class="no-img">-</span>
                     <?php endif; ?>
                 </td>
-
-                <!-- Komentar user -->
                 <td><?= nl2br($r['komentar']) ?></td>
-
-                <!-- Tanggal komentar dikirim -->
                 <td class="date-col">
                     <?= $r['created_at'] ?? '-' ?>
                 </td>
