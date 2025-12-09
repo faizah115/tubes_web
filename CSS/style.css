@@ -291,8 +291,8 @@
 
 /* Samakan tinggi gambar */
 .card-img-top {
-    height: 350px;
-    object-fit: cover;
+    height: auto !important;
+    /* object-fit: cover; */
 }
 
 /* Samakan tinggi judul */
