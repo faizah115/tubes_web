@@ -20,6 +20,18 @@ $books = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $books[] = $row;
 }
+
+$search = isset($_GET['search']) ? $_GET['search'] : "";
+
+if ($search != "") {
+    $sql = "SELECT * FROM buku WHERE judul LIKE '%$search%'";
+} else {
+    $sql = "SELECT * FROM buku";
+}
+
+$query = mysqli_query($conn, $sql);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -40,30 +52,47 @@ while ($row = mysqli_fetch_assoc($result)) {
 <body>
 
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="index.php">Buku Pedia</a>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container py-2">
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <!-- Logo -->
+        <a class="navbar-brand fw-bold fs-4" href="index.php">Buku Pedia</a>
 
-            <div class="collapse navbar-collapse" id="navMenu">
-                <ul class="navbar-nav ms-auto gap-4">
-                    <li class="nav-item"><a class="nav-link" href="index.php">Beranda</a></li>
-                    <li class="nav-item"><a class="nav-link" href="riwayat_halaman.php">Riwayat Komentar</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#daftar-buku">Daftar Buku</a></li>
-                    <li class="nav-item">
+        <!-- Toggle Mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu -->
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto gap-3">
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">Beranda</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="riwayat_halaman.php">Riwayat Komentar</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#daftar-buku">Daftar Buku</a>
+                </li>
+
+                <li class="nav-item">
                     <a href="logout.php" class="nav-link text-danger"
-                     onclick="return confirm('Apakah Anda yakin ingin keluar?')">
-                     Keluar
-    </a>
-</li>
+                       onclick="return confirm('Apakah Anda yakin ingin keluar?')">
+                       Keluar
+                    </a>
+                </li>
 
-                </ul>
-            </div>
+            </ul>
         </div>
-    </nav>
+
+    </div>
+</nav>
+
 
     <!-- HERO -->
 <section class="hero-section d-flex align-items-center">
@@ -90,15 +119,26 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 
         <h2 class="fw-bold text-center mb-4">Pilih buku kamu!</h2>
+<section id="daftar-buku"></section>
 
 <!-- SEARCH BAR AESTHETIC -->
 <form method="GET" class="d-flex justify-content-center mb-4">
-    <div class="search-box">
+    <div class="search-box d-flex align-items-center">
+        
         <i class="bi bi-search search-icon"></i>
-        <input type="text" name="search" class="search-input" placeholder="Cari buku..." 
+
+        <input type="text" name="search" class="search-input"
+        placeholder="Cari buku..."
         value="<?= isset($_GET['search']) ? $_GET['search'] : '' ?>">
+
+       <button type="submit" class="search-btn">
+    <i class="bi bi-search"></i>
+</button>
+
     </div>
 </form>
+
+
 
 
         <div class="container mt-4">
@@ -156,6 +196,9 @@ while ($row = mysqli_fetch_assoc($result)) {
     <footer class="bg-dark text-white text-center py-3">
         © 2025 BukuPedia. All rights reserved.
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 </body>
 </html>

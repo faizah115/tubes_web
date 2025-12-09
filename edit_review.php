@@ -12,12 +12,11 @@ if (!isset($_GET["id"])) {
     die("ID review tidak ada!");
 }
 
-$id = intval($_GET["id"]); // ubah ke integer
+$id = intval($_GET["id"]); 
 
 
 /* ----------------------------------------------------------
    AMBIL DATA REVIEW BERDASARKAN ID
-   Digunakan untuk menampilkan data lama & mengambil buku_id
 ---------------------------------------------------------- */
 $q = $conn->prepare("SELECT * FROM reviews WHERE id=?");
 $q->bind_param("i", $id);
@@ -30,96 +29,136 @@ if (!$data) {
 
 
 /* ----------------------------------------------------------
-   MENGAMBIL buku_id
-   Jika tidak dikirim via URL → gunakan data dari database
+   Ambil buku_id untuk redirect
 ---------------------------------------------------------- */
 $buku_id = isset($_GET["buku_id"]) ? intval($_GET["buku_id"]) : $data["buku_id"];
 
 
 // =================================================================
-//                              UPDATE REVIEW
+//                            UPDATE REVIEW
 // =================================================================
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $nama     = $_POST["nama"];
     $komentar = $_POST["komentar"];
-    $gambar   = $data["gambar"];  // gambar lama (default)
+    $gambar   = $data["gambar"];  
 
-    /* ----------------------------------------------------------
-       JIKA USER MENGUPLOAD FOTO BARU
-       → hapus foto lama
-       → simpan foto baru ke folder uploads/
-    ---------------------------------------------------------- */
     if (!empty($_FILES["foto"]["name"])) {
 
         if ($gambar && file_exists("uploads/" . $gambar)) {
-            unlink("uploads/" . $gambar); // hapus foto lama
+            unlink("uploads/" . $gambar); 
         }
 
         $newName = uniqid() . "_" . $_FILES["foto"]["name"];
         move_uploaded_file($_FILES["foto"]["tmp_name"], "uploads/" . $newName);
 
-        $gambar = $newName; // ganti dengan foto baru
+        $gambar = $newName;
     }
 
-    /* ----------------------------------------------------------
-       UPDATE DATA REVIEW KE DATABASE
-    ---------------------------------------------------------- */
     $update = $conn->prepare("UPDATE reviews SET nama=?, komentar=?, gambar=? WHERE id=?");
     $update->bind_param("sssi", $nama, $komentar, $gambar, $id);
     $update->execute();
 
-    // kembali ke halaman detail buku
     header("Location: detail.php?id=" . $buku_id);
     exit;
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
     <title>Edit Review</title>
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 </head>
 
-<body class="p-4">
+<body class="bg-light">
 
-<!-- Judul halaman -->
-<h3>Edit Review</h3>
+<!-- ============================================================
+     NAVBAR (VERSI FINAL)
+============================================================ -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container py-2">
 
-<!-- Form edit review -->
-<form method="POST" enctype="multipart/form-data" class="row g-3">
+        <a class="navbar-brand fw-bold fs-4" href="index.php">Buku Pedia</a>
 
-    <!-- Input nama pengguna -->
-    <div class="col-md-6">
-        <label>Nama</label>
-        <input type="text" name="nama" value="<?= $data['nama'] ?>" class="form-control" required>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto gap-3">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">Beranda</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="riwayat_halaman.php">Riwayat Komentar</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php#daftar-buku">Daftar Buku</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="logout.php" class="nav-link text-danger"
+                       onclick="return confirm('Apakah Anda yakin ingin keluar?')">
+                       Keluar
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
     </div>
+</nav>
 
-    <!-- Input upload gambar baru -->
-    <div class="col-md-6">
-        <label>Upload Gambar Baru</label>
-        <input type="file" name="foto" class="form-control">
+<!-- ============================================================
+     FORM EDIT REVIEW
+============================================================ -->
 
-        <!-- Menampilkan foto lama jika ada -->
-        <?php if ($data["gambar"]): ?>
-            <img src="uploads/<?= $data['gambar'] ?>" width="120" class="mt-2 rounded">
-        <?php endif; ?>
-    </div>
+<div class="container py-5">
 
-    <!-- Input komentar -->
-    <div class="col-12">
-        <label>Komentar</label>
-        <textarea name="komentar" class="form-control" rows="4" required><?= $data['komentar'] ?></textarea>
-    </div>
+    <h3 class="fw-bold mb-4">Edit Review</h3>
 
-    <!-- Tombol simpan & batal -->
-    <div class="col-12">
-        <button class="btn btn-warning">Simpan</button>
-        <a href="detail.php?id=<?= $buku_id ?>" class="btn btn-secondary">Batal</a>
-    </div>
+    <form method="POST" enctype="multipart/form-data" class="row g-3 bg-white p-4 rounded shadow-sm">
 
-</form>
+        <div class="col-md-6">
+            <label class="form-label">Nama</label>
+            <input type="text" name="nama" value="<?= $data['nama'] ?>" class="form-control" required>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Upload Gambar Baru</label>
+            <input type="file" name="foto" class="form-control">
+
+            <?php if ($data["gambar"]): ?>
+                <img src="uploads/<?= $data['gambar'] ?>" width="120" class="mt-2 rounded">
+            <?php endif; ?>
+        </div>
+
+        <div class="col-12">
+            <label class="form-label">Komentar</label>
+            <textarea name="komentar" class="form-control" rows="4" required><?= $data['komentar'] ?></textarea>
+        </div>
+
+        <div class="col-12 mt-2">
+            <button class="btn btn-warning px-4">Simpan</button>
+            <a href="detail.php?id=<?= $buku_id ?>" class="btn btn-secondary px-4">Batal</a>
+        </div>
+
+    </form>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

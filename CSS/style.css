@@ -306,3 +306,53 @@
 .btn-detail {
     margin-top: auto;
 }
+
+/* SEARCH BUTTON ICON */
+.search-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.search-btn {
+    border: none;
+    background: transparent !important;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.search-btn i {
+    font-size: 20px;
+    color: #000;  /* hitam, terlihat */
+}
+
+
+/* Hover */
+.search-btn:hover i {
+    color: #1a8cef;
+}
+
+/* Responsif untuk HP */
+@media (max-width: 480px) {
+    .search-box {
+        width: 100%;
+        padding: 5px 10px;
+    }
+    .search-input {
+        font-size: 14px;
+        padding: 10px 40px 10px 15px;
+    }
+}
+
+nav.navbar {
+    margin: 0 !important;
+    padding-top: 0 !important;
+}
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+}

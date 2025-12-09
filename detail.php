@@ -16,27 +16,23 @@ if (!$buku) {
     die("Buku tidak ditemukan!");
 }
 
-
 // ======================================
 // PROSES KIRIM REVIEW
 // ======================================
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // Amankan input dari kutip & karakter berbahaya
     $nama = mysqli_real_escape_string($conn, $_POST["nama"]);
     $komentar = mysqli_real_escape_string($conn, $_POST["komentar"]);
     $user_id = $_SESSION["user_id"];
 
     $gambar = "";
 
-    // Upload gambar jika ada
     if (!empty($_FILES["foto"]["name"])) {
         $namaFile = time() . "_" . $_FILES["foto"]["name"];
         move_uploaded_file($_FILES["foto"]["tmp_name"], "uploads/" . $namaFile);
         $gambar = mysqli_real_escape_string($conn, $namaFile);
     }
 
-    // Query aman
     $sql = "
         INSERT INTO reviews (buku_id, user_id, nama, komentar, gambar)
         VALUES ($buku_id, $user_id, '$nama', '$komentar', '$gambar')
@@ -49,21 +45,72 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 // ======================================
-// AMBIL SEMUA REVIEW BUKU INI
+// AMBIL SEMUA REVIEW
 // ======================================
 $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id ORDER BY id DESC");
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title><?= $buku["judul"] ?></title>
+
+    <!-- BOOTSTRAP CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- BOOTSTRAP ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 
 <body class="bg-light">
 
+<!-- ============================================================
+     NAVBAR (VERSI FINAL)
+============================================================ -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container py-2">
+
+        <a class="navbar-brand fw-bold fs-4" href="index.php">Buku Pedia</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto gap-3">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">Beranda</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="riwayat_halaman.php">Riwayat Komentar</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php#daftar-buku">Daftar Buku</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="logout.php" class="nav-link text-danger"
+                       onclick="return confirm('Apakah Anda yakin ingin keluar?')">
+                       Keluar
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+    </div>
+</nav>
+
+
+
+<!-- ============================================================
+     DETAIL BUKU + REVIEW
+============================================================ -->
 <div class="container py-5">
 
     <!-- DETAIL BUKU -->
@@ -152,8 +199,12 @@ $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id O
 
                 <td>
                     <a href="edit_review.php?id=<?= $r['id'] ?>&buku_id=<?= $buku['id'] ?>" class="btn btn-sm btn-warning">Edit</a>
-                    <a href="delete_review.php?id=<?= $r['id'] ?>&buku_id=<?= $buku['id'] ?>" class="btn btn-sm btn-danger"
-                       onclick="return confirm('Hapus review ini?')">Delete</a>
+ <a href="delete_review.php?id=<?= $r['id'] ?>&buku_id=<?= $buku['id'] ?>&from=detail"
+   class="btn btn-sm btn-danger"
+   onclick="return confirm('Hapus review ini?')">
+   Delete
+</a>
+
                 </td>
             </tr>
             <?php endwhile; ?>
@@ -164,6 +215,9 @@ $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id O
     </table>
 
 </div>
+
+<!-- BOOTSTRAP JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

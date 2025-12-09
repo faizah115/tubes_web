@@ -42,6 +42,7 @@ if (mysqli_num_rows($query) === 1) {
         $_SESSION["login"] = true;
         $_SESSION["role"] = "user";
         $_SESSION["username"] = $username;
+        $_SESSION["user_id"] = $user["id"];
 
         // REMEMBER ME TANPA DATABASE
         if (isset($_POST['remember'])) {
