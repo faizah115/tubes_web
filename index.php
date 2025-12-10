@@ -2,20 +2,16 @@
 require "koneksi.php";
 require "session_check.php";    
     
-// Ambil kata pencarian (jika ada)
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
-// Tentukan query berdasarkan pencarian
 if ($search != '') {
     $sql = "SELECT * FROM buku WHERE judul LIKE '%$search%' ORDER BY id ASC";
 } else {
     $sql = "SELECT * FROM buku ORDER BY id ASC";
 }
 
-// Jalankan query
 $result = mysqli_query($conn, $sql);
 
-// Masukkan ke array
 $books = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $books[] = $row;
@@ -42,29 +38,20 @@ $query = mysqli_query($conn, $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buku Kita | Forum Diskusi Buku </title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-
-    <!-- NAVBAR -->
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container py-2">
 
-        <!-- Logo -->
         <a class="navbar-brand fw-bold fs-4" href="index.php">Buku Pedia</a>
-
-        <!-- Toggle Mobile -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Menu -->
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ms-auto gap-3">
                 
@@ -93,8 +80,6 @@ $query = mysqli_query($conn, $sql);
     </div>
 </nav>
 
-
-    <!-- HERO -->
 <section class="hero-section d-flex align-items-center">
     <img src="assets/index.jpeg" class="hero-bg">
 
@@ -110,9 +95,6 @@ $query = mysqli_query($conn, $sql);
     </div>
 </section>
 
-
-
-    <!-- BENEFITS -->
     <section class="text-center py-5">
         <h2 class="fw-bold">Mengapa Bergabung dengan BukuPedia? </h2>
         <p class="text-muted">Dapatkan inspirasi dan wawasan baru dari setiap ulasan di BukuPedia</p>
@@ -121,11 +103,10 @@ $query = mysqli_query($conn, $sql);
         <h2 class="fw-bold text-center mb-4">Pilih buku kamu!</h2>
 <section id="daftar-buku"></section>
 
-<!-- SEARCH BAR AESTHETIC -->
 <form method="GET" class="d-flex justify-content-center mb-4">
     <div class="search-box d-flex align-items-center">
         
-        <i class="bi bi-search search-icon"></i>
+        
 
         <input type="text" name="search" class="search-input"
         placeholder="Cari buku..."
@@ -137,9 +118,6 @@ $query = mysqli_query($conn, $sql);
 
     </div>
 </form>
-
-
-
 
         <div class="container mt-4">
             <div class="row gy-4">
@@ -163,7 +141,6 @@ $query = mysqli_query($conn, $sql);
         </div>
     </section>
 
-    <!-- DAFTAR BUKU -->
     <section id="daftar-buku" class="py-5 bg-light">
         <div class="container">
             <h2 class="fw-bold text-center mb-4">Pilih buku kamu!</h2>
@@ -199,6 +176,7 @@ $query = mysqli_query($conn, $sql);
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 
 </body>
 </html>

@@ -1,66 +1,53 @@
 <?php
-session_start();
 require "koneksi.php";
+session_start();
 
 $username = $_POST["username"];
 $password = $_POST["password"];
-$role = $_POST["role"];
 
-// LOGIN ADMIN
-if ($role == "admin") {
-    if ($username === "admin" && $password === "admin123") {
+if ($username === "admin" && $password === "admin123") {
+    $_SESSION["username"] = "admin";
+    $_SESSION["role"] = "admin";
+    $_SESSION["login"] = true;
 
-        $_SESSION["login"] = true;
-        $_SESSION["role"] = "admin";
-        $_SESSION["username"] = "admin";
+    // Tambah user_id untuk admin (nilai 0)
+    $_SESSION["user_id"] = 0;
 
-        // REMEMBER ME ADMIN TANPA DATABASE
-        if (isset($_POST['remember'])) {
-            $expire = time() + 120;
-
-            setcookie("remember_username", "admin", $expire, "/", "", false, true);
-            setcookie("remember_role", "admin", $expire, "/", "", false, true);
-        }
-
-        header("Location: index.php");
-        exit;
-    }
-}
-
-// LOGIN USER BIASA
-// LOGIN USER BIASA
-$query = mysqli_query($conn, "SELECT * FROM users WHERE username='$username' LIMIT 1");
-
-if (mysqli_num_rows($query) === 1) {
-    $user = mysqli_fetch_assoc($query);
-
-    // cek password (hashed atau plain text)
-    $validPassword = password_verify($password, $user["password"]) || $password === $user["password"];
-
-    if ($validPassword) {
-
-        $_SESSION["login"] = true;
-        $_SESSION["role"] = "user";
-        $_SESSION["username"] = $username;
-        $_SESSION["user_id"] = $user["id"];
-
-        // REMEMBER ME TANPA DATABASE
-        if (isset($_POST['remember'])) {
-            $expire = time() + 120;
-
-            setcookie("remember_username", $username, $expire, "/", "", false, true);
-            setcookie("remember_role", "user", $expire, "/", "", false, true);
-        }
-
-        header("Location: index.php");
-        exit;
-
-    } else {
-        header("Location: login.php?role=user&error=Password salah!");
-        exit;
-    }
-
-} else {
-    header("Location: login.php?role=user&error=Username tidak ditemukan!");
+    header("Location: index.php");
     exit;
 }
+
+$q = $conn->prepare("SELECT * FROM users WHERE username=? LIMIT 1");
+$q->bind_param("s", $username);
+$q->execute();
+$user = $q->get_result()->fetch_assoc();
+
+// Username tidak ditemukan
+if (!$user) {
+    header("Location: login.php?error=Username tidak ditemukan");
+    exit;
+}
+
+// Password cocok (plain atau hash)
+if ($user["password"] === $password || password_verify($password, $user["password"])) {
+
+    $_SESSION["username"] = $user["username"];
+    $_SESSION["role"] = "user";
+    $_SESSION["login"] = true;
+
+    $_SESSION["user_id"] = $user["id"];
+
+    // remember me
+    if (isset($_POST["remember"])) {
+        setcookie("remember_username", $user["username"], time() + 86400, "/");
+        setcookie("remember_role", "user", time() + 86400, "/");
+    }
+
+    header("Location: index.php");
+    exit;
+}
+
+// Jika password salah
+header("Location: login.php?error=Password salah");
+exit;
+?>

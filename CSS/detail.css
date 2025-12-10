@@ -1,0 +1,87 @@
+/* ============================
+   SEMBUNYIKAN CARD DI DESKTOP
+=============================== */
+.review-card {
+    display: none !important;
+}
+
+
+/* ============================
+   TEXT JUSTIFY
+============================= */
+.text-justify {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+/* ============================
+   REVIEW CARD (MOBILE)
+============================= */
+@media (max-width: 768px) {
+
+    /* Sembunyikan tabel di mobile */
+    .review-table {
+        display: none !important;
+    }
+
+    /* Tampilkan card di mobile */
+    .review-card {
+        display: block !important;
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        margin-bottom: 20px;
+    }
+
+    /* Tampilkan gambar card */
+    .review-img {
+        display: block !important;
+        width: 100% !important;
+        max-height: 400px !important;
+        object-fit: cover !important;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .review-actions a {
+        width: 100%;
+        margin-bottom: 6px;
+    }
+}
+
+/* ============================
+   DESKTOP REVIEW TABLE
+============================= */
+.review-table img {
+    border-radius: 6px;
+}
+
+/* PERBAIKAN GAMBAR BUKU DI MOBILE */
+/* =============================
+   PERBAIKAN GAMBAR DETAIL
+============================= */
+
+/* Desktop: gambar dibuat lebih besar */
+/* =============================
+   PERBAIKAN GAMBAR DETAIL
+============================= */
+
+/* Desktop: gambar dibuat lebih besar */
+.book-cover img {
+    width: 380px !important;
+    height: auto !important;
+    object-fit: cover !important;
+    border-radius: 12px;
+}
+
+/* Mobile: gambar full 100% */
+@media (max-width: 768px){
+    .book-cover img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: cover !important;
+    }
+}
+
+

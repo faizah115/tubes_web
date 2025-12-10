@@ -1,18 +1,18 @@
 <?php
-/* ============================================================
-   IMPORT FILE: CEK SESSION LOGIN & KONEKSI DATABASE
-============================================================ */
 require "session_check.php";
 require "koneksi.php";
 
-/* ============================================================
-   CEK ROLE (ADMIN / USER)
-============================================================ */
+function isMobile() {
+    return preg_match('/(android|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile)/i',
+    $_SERVER['HTTP_USER_AGENT']);
+}
+$isMobile = isMobile();
 
+
+/* CEK ROLE */
 if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
 
     $title = "Semua Riwayat Komentar";
-
     $sql = "
         SELECT reviews.*, buku.judul, users.username 
         FROM reviews
@@ -24,17 +24,14 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
 
 } else {
 
-    $username = $_SESSION["username"]; 
-
+    $username = $_SESSION["username"];
     $user_q = mysqli_query($conn, "SELECT id FROM users WHERE username='$username' LIMIT 1");
     $user = mysqli_fetch_assoc($user_q);
 
-    if (!$user) {
-        die("User tidak ditemukan!");
-    }
+    if (!$user) { die("User tidak ditemukan!"); }
 
     $user_id = $user["id"];
-    $title = "Riwayat Komentar Anda"; 
+    $title = "Riwayat Komentar Anda";
 
     $sql = "
         SELECT reviews.*, buku.judul
@@ -52,19 +49,21 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
     <meta charset="UTF-8">
     <title><?= $title ?></title>
 
-    <!-- Bootstrap CSS -->
+    <!-- CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="CSS/riwayat.css?v=11">
 
-    <link rel="stylesheet" href="CSS/riwayat.css">
+    <style>
+        .text-justify {
+            text-align: justify;
+            text-justify: inter-word;
+        }
+    </style>
 </head>
 <body>
 
-<!-- ============================================================
-     NAVBAR (Sudah diperbaiki)
-============================================================ -->
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container py-2">
 
@@ -76,26 +75,12 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
 
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ms-auto gap-3">
-                
+                <li class="nav-item"><a class="nav-link" href="index.php">Beranda</a></li>
+                <li class="nav-item"><a class="nav-link" href="riwayat_halaman.php">Riwayat Komentar</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.php#daftar-buku">Daftar Buku</a></li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php">Beranda</a>
+                    <a href="logout.php" class="nav-link text-danger" onclick="return confirm('Apakah Anda yakin ingin keluar?')">Keluar</a>
                 </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="riwayat_halaman.php">Riwayat Komentar</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php#daftar-buku">Daftar Buku</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="logout.php" class="nav-link text-danger"
-                       onclick="return confirm('Apakah Anda yakin ingin keluar?')">
-                       Keluar
-                    </a>
-                </li>
-
             </ul>
         </div>
 
@@ -103,62 +88,70 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
 </nav>
 
 
-<!-- ============================================================
-     KONTEN HALAMAN RIWAYAT
-============================================================ -->
 <div class="riwayat-container">
+
     <h2 class="title"><?= $title ?></h2>
 
-    <table class="riwayat-table">
-        <thead>
-            <tr>
-                <th>Judul Buku</th>
-                <th>Nama User</th>
-                <th>Foto</th>
-                <th>Komentar</th>
-                <th>Dikirim</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
+    <!-- ===============================
+         DESKTOP TABLE
+    ================================ -->
+<?php if (!$isMobile): ?> 
+<table class="riwayat-table">
+    <thead>
+        <tr>
+            <th>Judul Buku</th>
+            <th>Nama User</th>
+            <th>Foto</th>
+            <th>Komentar</th>
+            <th>Dikirim</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
 
-        <tbody>
+    <tbody>
         <?php while ($r = mysqli_fetch_assoc($result)): ?>
             <tr>
+
                 <td><?= $r['judul'] ?></td>
                 <td><?= $r["username"] ?? "-" ?></td>
 
+                <!-- FOTO DESKTOP -->
                 <td>
                     <?php if (!empty($r["gambar"])): ?>
-                        <img src="uploads/<?= $r['gambar'] ?>" class="img-mini">
+                        <div class="review-img-wrapper">
+                            <img src="uploads/<?= $r['gambar'] ?>" class="review-img img-mini">
+                        </div>
                     <?php else: ?>
                         <span class="no-img">-</span>
                     <?php endif; ?>
                 </td>
 
-                <td><?= nl2br($r['komentar']) ?></td>
-                
-                <td class="date-col">
-                    <?= $r['created_at'] ?? '-' ?>
-                </td>
+                <td class="text-justify"><?= nl2br($r['komentar']) ?></td>
+
+                <td class="date-col"><?= $r['created_at'] ?? '-' ?></td>
 
                 <td class="action-col">
-                    <a href="edit_review.php?id=<?= $r['id'] ?>" class="btn-edit">Edit</a>
-<a href="delete_review.php?id=<?= $r['id'] ?>&from=riwayat" 
-   class="btn-delete"
-   onclick="return confirm('Hapus komentar ini?')">
-   Delete
-</a>
-
-
+                    <div class="action-buttons">
+                        <a href="edit_review.php?id=<?= $r['id'] ?>" class="btn-edit">Edit</a>
+                        <a href="delete_review.php?id=<?= $r['id'] ?>&from=riwayat"
+                           class="btn-delete"
+                           onclick="return confirm('Hapus komentar ini?')">
+                           Delete
+                        </a>
+                    </div>
                 </td>
 
             </tr>
         <?php endwhile; ?>
-        </tbody>
-    </table>
+    </tbody>
+</table>
+<?php endif; ?>
+
+
+
 </div>
 
-<!-- Bootstrap JS -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

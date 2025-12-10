@@ -1,4 +1,6 @@
-/* Styling dasar untuk body halaman */
+/* ============================
+   STYLING DASAR
+============================= */
 body {
     font-family: 'Poppins', sans-serif;
     background: #f5f5f5;
@@ -6,10 +8,10 @@ body {
     padding: 0;
 }
 
-/* Container utama yang membungkus seluruh isi riwayat */
+/* Container utama */
 .riwayat-container {
-    width: 90%;
-    max-width: 1100px;
+    width: 95%;          /* dari 90% → 95% */
+    max-width: 1500px;   /* dari 1100px → 1500px agar tabel bisa melebar */
     margin: 40px auto;
     background: #ffffff;
     padding: 25px;
@@ -17,14 +19,17 @@ body {
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
-/* Judul besar pada halaman riwayat komentar */
+
+/* Judul */
 .title {
     font-size: 26px;
     margin-bottom: 20px;
     font-weight: 600;
 }
 
-/* Tabel utama yang menampilkan daftar komentar */
+/* ============================
+   TABEL UNTUK DESKTOP
+============================= */
 .riwayat-table {
     width: 100%;
     border-collapse: collapse;
@@ -32,7 +37,6 @@ body {
     background: #fff;
 }
 
-/* Header tabel (Judul Buku, Foto, Komentar, dll) */
 .riwayat-table th {
     background: #1f1f1f;
     color: white;
@@ -41,27 +45,24 @@ body {
     font-size: 15px;
 }
 
-/* Sel (kolom) dalam tabel */
 .riwayat-table td {
     padding: 12px;
     border-bottom: 1px solid #ddd;
     vertical-align: middle;
 }
 
-/* Gambar mini di kolom review */
+/* Gambar mini di tabel */
 .img-mini {
-    width: 120px;
+    width: 250px;
     height: auto;
-    border-radius: 6px;
-    object-fit: cover;
+    border-radius: 15px;
 }
 
-/* Teks jika tidak ada gambar */
 .no-img {
     color: #777;
 }
 
-/* Tombol edit pada kolom aksi */
+/* Tombol edit */
 .btn-edit {
     background: #f1c40f;
     color: #000;
@@ -74,12 +75,11 @@ body {
     transition: 0.2s;
 }
 
-/* Efek hover untuk tombol edit */
 .btn-edit:hover {
     background: #d4ac0d;
 }
 
-/* Tombol delete pada kolom aksi */
+/* Tombol delete */
 .btn-delete {
     background: #e74c3c;
     color: #fff;
@@ -91,19 +91,119 @@ body {
     transition: 0.2s;
 }
 
-/* Efek hover untuk tombol delete */
 .btn-delete:hover {
     background: #c0392b;
 }
 
-/* Kolom aksi agar tombol berada dalam satu baris */
+/* Kolom aksi */
 .action-col {
     white-space: nowrap;
 }
 
-/* Kolom tanggal komentar */
+/* Kolom tanggal */
 .date-col {
     font-size: 14px;
     color: #555;
     font-style: italic;
 }
+
+/* Aksi vertikal (card mode) */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.action-buttons a {
+    width: 100%;
+    text-align: center;
+}
+
+/* ============================
+   RESPONSIVE MOBILE: CARD VIEW
+============================= */
+
+@media (max-width: 768px) {
+
+    /* Sembunyikan tabel di HP */
+    .riwayat-table {
+        display: none !important;
+    }
+
+    /* CARD */
+    .review-card {
+        display: block;
+        background: #fff;
+        padding: 18px;
+        border-radius: 12px;
+        margin-bottom: 18px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+
+    .review-card h5 {
+        margin-bottom: 5px;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .review-card .user {
+        color: #666;
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    /* FOTO besar dan stabil */
+.review-img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important; /* gambar tidak terpotong */
+    border-radius: 12px !important;
+    margin: 12px 0 !important;
+    display: block;
+}
+
+
+    /* Tombol di card */
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 12px;
+    }
+
+    .btn-edit, .btn-delete {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+    }
+}
+
+/* ============================
+   TEXT JUSTIFY
+============================= */
+.text-justify {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+@media (max-width: 768px) {
+
+    /* Sembunyikan tabel di mobile */
+    .riwayat-table {
+        display: none !important;
+        visibility: hidden;
+        height: 0;
+        overflow: hidden;
+    }
+
+    /* Gambar mobile full-width rapi */
+    img.review-img,
+    .review-card img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain !important;
+        border-radius: 10px;
+    }
+}
+
+

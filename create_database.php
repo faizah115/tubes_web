@@ -2,49 +2,20 @@
 /* -------------------------------------------------------
    IMPORT: koneksi database utama & pengecekan session login
 -------------------------------------------------------- */
-require "koneksi.php";
-require "session_check.php";    
+require "koneksi.php";       // koneksi InfinityFree
+require "session_check.php"; 
 
 
 /* -------------------------------------------------------
-   KONFIGURASI KONEKSI MANUAL KE SERVER MYSQL
-   (dipakai khusus untuk CREATE DATABASE)
+   MENGECEK KONEKSI DARI koneksi.php
 -------------------------------------------------------- */
-$server = "localhost";
-$user   = "root";
-$pass   = "";
-
-/* -------------------------------------------------------
-   MEMBUKA KONEKSI KE SERVER MYSQL TANPA MEMILIH DATABASE
--------------------------------------------------------- */
-$conn = mysqli_connect($server, $user, $pass);
-
 if (!$conn) {
-    die("Koneksi gagal: " . mysqli_connect_error());
+    die("Koneksi database gagal: " . mysqli_connect_error());
 }
 
 
 /* -------------------------------------------------------
-   MEMBUAT DATABASE "bukupedia" JIKA BELUM ADA
--------------------------------------------------------- */
-$dbname = "bukupedia";
-$sql = "CREATE DATABASE IF NOT EXISTS $dbname";
-
-if (mysqli_query($conn, $sql)) {
-    echo "Database 'bukupedia' berhasil dibuat atau sudah ada.<br>";
-} else {
-    die("Gagal membuat database: " . mysqli_error($conn));
-}
-
-
-/* -------------------------------------------------------
-   MEMILIH DATABASE "bukupedia" UNTUK DIGUNAKAN
--------------------------------------------------------- */
-mysqli_select_db($conn, $dbname);
-
-
-/* -------------------------------------------------------
-   MEMBUAT TABEL "buku" (menyimpan data buku)
+   MEMBUAT TABEL "buku" HANYA JIKA BELUM ADA
 -------------------------------------------------------- */
 $sql_buku = "
 CREATE TABLE IF NOT EXISTS buku (
@@ -56,14 +27,16 @@ CREATE TABLE IF NOT EXISTS buku (
     halaman_detail VARCHAR(255),
     deskripsi TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)";
+) ENGINE=InnoDB;
+";
+
 mysqli_query($conn, $sql_buku);
 
 
 /* -------------------------------------------------------
-   MEMBUAT TABEL "reviews" (menyimpan komentar pengguna)
+   MEMBUAT TABEL "reviews" HANYA JIKA BELUM ADA
 -------------------------------------------------------- */
-$sql_review = "
+$sql_reviews = "
 CREATE TABLE IF NOT EXISTS reviews (
     id INT AUTO_INCREMENT PRIMARY KEY,
     buku_id INT NOT NULL,
@@ -72,29 +45,40 @@ CREATE TABLE IF NOT EXISTS reviews (
     gambar VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (buku_id) REFERENCES buku(id) ON DELETE CASCADE
-)";
-mysqli_query($conn, $sql_review);
-
-
-/* -------------------------------------------------------
-   MENGISI DATA AWAL KE TABEL BUKU
-   (empat contoh buku default untuk aplikasi)
--------------------------------------------------------- */
-$sql_insert = "
-INSERT INTO buku (judul, penulis, genre, gambar, halaman_detail, deskripsi) VALUES
-('Filosofi Teras', 'Henry Manampiring', 'Self Improvement', 'filosofi_teras.jpeg', 'detail.php?id=1', 'Buku Stoikisme modern yang mudah dipahami.'),
-('Laut Bercerita', 'Leila S. Chudori', 'Fiksi', 'laut_bercerita.jpeg', 'detail.php?id=2', 'Novel tragedi penghilangan aktivis 1998.'),
-('Alpha Girls', 'Julian Guthrie', 'Biografi', 'alpa_girls.jpeg', 'detail.php?id=3', 'Perjalanan perempuan berpengaruh di dunia teknologi.'),
-('Atomic Habits', 'James Clear', 'Self Improvement', 'atomic_habits.jpeg', 'detail.php?id=4', 'Kebiasaan kecil untuk perubahan besar.');
+) ENGINE=InnoDB;
 ";
 
-mysqli_query($conn, $sql_insert);
+mysqli_query($conn, $sql_reviews);
 
 
 /* -------------------------------------------------------
-   PESAN TAMBAHAN & MENUTUP KONEKSI
+   MENGECEK APAKAH TABEL BUKU SUDAH PUNYA DATA
+   Jika sudah ada → TIDAK memasukkan ulang data default
 -------------------------------------------------------- */
-echo "<br>Semua tabel sudah dibuat dan data awal sudah dimasukkan.";
+$cek = mysqli_query($conn, "SELECT COUNT(*) AS total FROM buku");
+$row = mysqli_fetch_assoc($cek);
+
+if ($row['total'] == 0) {
+
+    /* -------------------------------------------------------
+       MEMASUKKAN DATA DEFAULT (HANYA SEKALI)
+    -------------------------------------------------------- */
+    $sql_insert = "
+    INSERT INTO buku (judul, penulis, genre, gambar, halaman_detail, deskripsi) VALUES
+    ('Filosofi Teras', 'Henry Manampiring', 'Self Improvement', 'filosofi_teras.jpeg', 'detail.php?id=1', 'Buku Stoikisme modern yang mudah dipahami.'),
+    ('Laut Bercerita', 'Leila S. Chudori', 'Fiksi', 'laut_bercerita.jpeg', 'detail.php?id=2', 'Novel tragedi penghilangan aktivis 1998.'),
+    ('Alpha Girls', 'Julian Guthrie', 'Biografi', 'alpa_girls.jpeg', 'detail.php?id=3', 'Perjalanan perempuan berpengaruh di dunia teknologi.'),
+    ('Atomic Habits', 'James Clear', 'Self Improvement', 'atomic_habits.jpeg', 'detail.php?id=4', 'Kebiasaan kecil untuk perubahan besar.');
+    ";
+
+    mysqli_query($conn, $sql_insert);
+}
+
+
+/* -------------------------------------------------------
+   PESAN TAMBAHAN
+-------------------------------------------------------- */
+echo "Database aman. Struktur dicek. Data tidak diduplikasi.";
 
 mysqli_close($conn);
 ?>

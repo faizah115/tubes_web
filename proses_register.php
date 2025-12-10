@@ -1,25 +1,29 @@
 <?php
 require "koneksi.php";
-require "session_check.php";
 
-require "koneksi.php";
+// Hanya boleh diakses via POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: register.php");
+    exit;
+}
 
+// ambil input
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-// cek jika username sudah ada
+// cek username sudah ada
 $cek = mysqli_query($conn, "SELECT * FROM users WHERE username='$username'");
 if (mysqli_num_rows($cek) > 0) {
     header("Location: register.php?error=Username sudah digunakan");
     exit;
 }
 
-// simpan user baru
+// insert user (untuk sekarang masih plain text)
 mysqli_query($conn, "
     INSERT INTO users (username, password, role)
     VALUES ('$username', '$password', 'user')
 ");
 
-header("Location: register.php?success=Registrasi berhasil, silakan login");
+header("Location: login.php?success=Registrasi berhasil, silakan login");
 exit;
-?>
+

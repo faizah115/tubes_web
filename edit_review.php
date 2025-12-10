@@ -1,13 +1,8 @@
 <?php
-/* ----------------------------------------------------------
-   IMPORT: koneksi database & pengecekan session login
----------------------------------------------------------- */
 require "koneksi.php";
 require "session_check.php";
 
-/* ----------------------------------------------------------
-   CEK APAKAH ID REVIEW DIKIRIM MELALUI URL
----------------------------------------------------------- */
+
 if (!isset($_GET["id"])) {
     die("ID review tidak ada!");
 }
@@ -15,9 +10,6 @@ if (!isset($_GET["id"])) {
 $id = intval($_GET["id"]); 
 
 
-/* ----------------------------------------------------------
-   AMBIL DATA REVIEW BERDASARKAN ID
----------------------------------------------------------- */
 $q = $conn->prepare("SELECT * FROM reviews WHERE id=?");
 $q->bind_param("i", $id);
 $q->execute();
@@ -27,16 +19,8 @@ if (!$data) {
     die("Review tidak ditemukan!");
 }
 
-
-/* ----------------------------------------------------------
-   Ambil buku_id untuk redirect
----------------------------------------------------------- */
 $buku_id = isset($_GET["buku_id"]) ? intval($_GET["buku_id"]) : $data["buku_id"];
 
-
-// =================================================================
-//                            UPDATE REVIEW
-// =================================================================
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $nama     = $_POST["nama"];
@@ -69,19 +53,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <title>Edit Review</title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 </head>
 
 <body class="bg-light">
 
-<!-- ============================================================
-     NAVBAR (VERSI FINAL)
-============================================================ -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container py-2">
 
@@ -118,10 +97,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     </div>
 </nav>
-
-<!-- ============================================================
-     FORM EDIT REVIEW
-============================================================ -->
 
 <div class="container py-5">
 

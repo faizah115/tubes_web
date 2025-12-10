@@ -1,29 +1,31 @@
 <?php
 session_start();
 
-// Cek apakah user sudah login
+// Waktu timeout: 30 menit (1800 detik)
+$timeout = 1800;
+
+// Set waktu aktivitas awal
+if (!isset($_SESSION['last_activity'])) {
+    $_SESSION['last_activity'] = time();
+}
+
+// Auto-login jika cookie remember ada
+if (
+    !isset($_SESSION['username']) && 
+    isset($_COOKIE['remember_username'])
+) {
+    $_SESSION['username'] = $_COOKIE['remember_username'];
+    $_SESSION['role']     = $_COOKIE['remember_role'] ?? 'user';
+    $_SESSION['login']    = true;
+}
+
+// Jika belum login → arahkan ke login
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
-// Timeout 1000 detik
-$timeout = 1000;
-
-if (!isset($_SESSION['login']) && isset($_COOKIE['remember_username'])) {
-    $_SESSION['login'] = true;
-    $_SESSION['username'] = $_COOKIE['remember_username'];
-    $_SESSION['role'] = $_COOKIE['remember_role'];
-}
-
-
-
-// Jika belum ada waktu aktivitas, set sekarang
-if (!isset($_SESSION['last_activity'])) {
-    $_SESSION['last_activity'] = time();
-}
-
-// Jika lebih dari timeout → logout paksa
+// Cek timeout session
 if (time() - $_SESSION['last_activity'] > $timeout) {
     session_unset();
     session_destroy();
@@ -31,6 +33,6 @@ if (time() - $_SESSION['last_activity'] > $timeout) {
     exit();
 }
 
-// Update waktu aktivitas tiap kali halaman diakses
+// Update aktivitas terakhir
 $_SESSION['last_activity'] = time();
 ?>

@@ -1,20 +1,11 @@
 <?php
-/* -----------------------------------------
-   IMPORT FILE PENTING UNTUK CEK LOGIN & DB
-------------------------------------------*/
 require "session_check.php";   
 require "koneksi.php";         
 
-/* -----------------------------------------
-   AMBIL ID USER DARI SESSION
-   Digunakan untuk menampilkan review miliknya
-------------------------------------------*/
+
 $user_id = $_SESSION["user_id"]; 
 
-/* -----------------------------------------
-   QUERY SQL UNTUK MENGAMBIL REVIEW PENGGUNA
-   Mengambil komentar + judul buku yang direview
-------------------------------------------*/
+
 $sql = "
     SELECT r.*, b.judul 
     FROM reviews r 

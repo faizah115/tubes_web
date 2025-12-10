@@ -1,61 +1,67 @@
 <?php
-/* --------------------------------------------
-   IMPORT FILE KONEKSI DATABASE
-   Dibutuhkan untuk proses pendaftaran akun
---------------------------------------------- */
-require "koneksi.php";
+$error = $_GET['error'] ?? "";
+$success = $_GET['success'] ?? "";
 ?>
+
 <!DOCTYPE html>
-<html lang="id"> 
-
+<html lang="id">
 <head>
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Akun Baru</title> 
+    <meta charset="UTF-8">
+    <title>Daftar Pengguna</title>
 
-    <!-- File CSS utama -->
-    <link rel="stylesheet" href="CSS/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/register.css">
 </head>
 
-<body class="login-body">
-    <h1 class="page-title">
-        Buat Akun Baru di <span class="highlight">BUKUPEDIA</span>
-    </h1>
-    <!-- Container utama untuk form pendaftaran -->
-    <div class="login-container">
-        <div class="login-box">
+<body>
 
-            <h2>Daftar Akun Baru</h2>
-            <p class="subtitle">Silakan isi form untuk membuat akun</p>
-            <!-- Pesan sukses jika proses register berhasil -->
-            <?php if (isset($_GET["success"])): ?>
-                <div class="alert success">
-                    <?= htmlspecialchars($_GET["success"]) ?>
-                </div>
-            <?php endif; ?>
+<div class="register-card">
 
-            <!-- Pesan error jika terjadi kesalahan input -->
-            <?php if (isset($_GET["error"])): ?>
-                <div class="alert">
-                    <?= htmlspecialchars($_GET["error"]) ?>
-                </div>
-            <?php endif; ?>
-            <!-- Form pendaftaran user baru -->
-            <form method="post" action="proses_register.php">
-                <div class="input-group">
-                    <input type="text" name="username" placeholder="Buat Username" required>
-                </div>
-                <div class="input-group">
-                    <input type="password" name="password" placeholder="Buat Password" required>
-                </div>
-                <button type="submit" class="btn-login">Daftar</button>
-            </form>
-            <p class="subtitle" style="margin-top:15px;">
-                ← <a href="login.php">Kembali ke Login</a>
-            </p>
+    <h2 class="register-title">Daftar Akun Baru</h2>
+    <p class="register-sub">Silakan isi form untuk membuat akun</p>
 
-        </div>
+    <?php if ($error): ?>
+        <p style="color:red; text-align:center; margin-bottom:10px;">
+            <?= $error ?>
+        </p>
+    <?php endif; ?>
+
+ <?php if (isset($_GET['success'])): ?>
+    <div class="alert-success">
+        <?= $_GET['success'] ?>
     </div>
+<?php endif; ?>
+
+<?php if (isset($_GET['error'])): ?>
+    <div class="alert-error">
+        <?= $_GET['error'] ?>
+    </div>
+<?php endif; ?>
+
+
+    <form method="POST" action="proses_register.php">
+
+        <input 
+            type="text" 
+            name="username" 
+            placeholder="Username"
+            class="register-input"
+            required>
+
+        <input 
+            type="password" 
+            name="password" 
+            placeholder="Password"
+            class="register-input"
+            required>
+
+        <button type="submit" class="register-btn">Daftar</button>
+    </form>
+
+    <div class="register-link">
+        ← <a href="login.php">Kembali ke Login</a>
+    </div>
+
+</div>
+
 </body>
 </html>
