@@ -2,13 +2,11 @@
 require "koneksi.php";
 require "session_check.php";
 
-
 if (!isset($_GET["id"])) {
     die("ID review tidak ada!");
 }
 
 $id = intval($_GET["id"]); 
-
 
 $q = $conn->prepare("SELECT * FROM reviews WHERE id=?");
 $q->bind_param("i", $id);
@@ -17,6 +15,19 @@ $data = $q->get_result()->fetch_assoc();
 
 if (!$data) {
     die("Review tidak ditemukan!");
+}
+
+$current_username = $_SESSION["username"];
+$current_role     = $_SESSION["role"] ?? "user";
+
+$review_user_id = $data["user_id"];
+
+$getUser = mysqli_query($conn, "SELECT id FROM users WHERE username='$current_username' LIMIT 1");
+$u = mysqli_fetch_assoc($getUser);
+$current_user_id = $u["id"];
+
+if ($current_role !== "admin" && $current_user_id != $review_user_id) {
+    die("Anda tidak punya izin untuk mengedit review ini.");
 }
 
 $buku_id = isset($_GET["buku_id"]) ? intval($_GET["buku_id"]) : $data["buku_id"];
