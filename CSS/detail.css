@@ -57,17 +57,7 @@
     border-radius: 6px;
 }
 
-/* PERBAIKAN GAMBAR BUKU DI MOBILE */
-/* =============================
-   PERBAIKAN GAMBAR DETAIL
-============================= */
 
-/* Desktop: gambar dibuat lebih besar */
-/* =============================
-   PERBAIKAN GAMBAR DETAIL
-============================= */
-
-/* Desktop: gambar dibuat lebih besar */
 .book-cover img {
     width: 380px !important;
     height: auto !important;
@@ -84,4 +74,132 @@
     }
 }
 
+/* === BUAT TABEL HALAMAN DETAIL MELEBAR 95% SEPERTI RIWAYAT === */
+.detail-wrapper {
+    max-width: 95% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.review-table {
+    width: 100% !important;
+    table-layout: fixed;
+}
+
+.review-table td, .review-table th {
+    padding: 12px;
+    vertical-align: top;
+}
+
+/* Ukuran foto biar rapi */
+.review-table img {
+    width: 150px !important;
+    height: auto !important;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.review-container {
+    width: 95%;
+    margin: auto;
+}
+
+.review-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.review-table thead {
+    background: #111;
+    color: white;
+}
+
+.review-table th, 
+.review-table td {
+    padding: 12px;
+    vertical-align: top;
+}
+
+.review-img-mini {
+    width: 150px;
+    border-radius: 8px;
+}
+
+.action-col {
+    width: 140px;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+/* ============================================
+   PERBAIKAN GAMBAR REVIEW DI MOBILE (FULL WIDTH)
+=============================================== */
+@media (max-width: 768px) {
+
+    /* Gambar review dalam card */
+    .review-card img.review-img {
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        object-fit: contain !important;
+        border-radius: 10px;
+        display: block;
+        margin: 0 auto 15px auto;
+    }
+
+    /* Gambar review dalam tabel desktop ketika tampil di mobile */
+    .review-table img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain !important;
+    }
+
+}
+
+/* Container utama untuk halaman detail buku */
+.detail-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;           /* center */
+    padding: 20px;
+}
+
+/* Layout konten buku */
+.detail-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Jika layar tablet ke atas → buat 2 kolom */
+@media (min-width: 768px) {
+    .detail-container {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .detail-image {
+        width: 350px;
+        flex-shrink: 0;
+    }
+
+    .detail-image img {
+        width: 100%;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .detail-content {
+        flex: 1;
+    }
+}
+
+/* Lebih rapi untuk layar besar */
+@media (min-width: 1200px) {
+    .detail-wrapper {
+        max-width: 1100px;
+    }
+}
 

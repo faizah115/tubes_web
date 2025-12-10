@@ -358,4 +358,80 @@ body {
 }
 
 
+/* Untuk layar di atas 768px (tablet ke atas) */
+@media (min-width: 768px) {
+    .container,
+    .riwayat-container {
+        max-width: 900px;    /* tengah & tidak terlalu lebar */
+        margin: 0 auto;      /* center */
+    }
+
+    .detail-container {
+        display: flex;
+        gap: 30px;
+        align-items: flex-start;
+    }
+
+    .detail-container img {
+        width: 300px;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .detail-content {
+        flex: 1;
+    }
+}
+
+/* Untuk layar besar (laptop / PC) */
+@media (min-width: 1200px) {
+    .container,
+    .riwayat-container {
+        max-width: 1100px;
+    }
+}
+
+/* Container utama untuk halaman detail buku */
+.detail-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;           /* center */
+    padding: 20px;
+}
+
+/* Layout konten buku */
+.detail-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Jika layar tablet ke atas → buat 2 kolom */
+@media (min-width: 768px) {
+    .detail-container {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .detail-image {
+        width: 350px;
+        flex-shrink: 0;
+    }
+
+    .detail-image img {
+        width: 100%;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .detail-content {
+        flex: 1;
+    }
+}
+
+/* Lebih rapi untuk layar besar */
+@media (min-width: 1200px) {
+    .detail-wrapper {
+        max-width: 1100px;
+    }
+}
 

@@ -29,10 +29,13 @@ $isMobile = isMobile();
 // ==========================================
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+$nama = mysqli_real_escape_string($conn, $_POST["nama"]);
+$komentar = mysqli_real_escape_string($conn, $_POST["komentar"]);
+$username = $_SESSION["username"];
+$getUser = mysqli_query($conn, "SELECT id FROM users WHERE username='$username' LIMIT 1");
+$u = mysqli_fetch_assoc($getUser);
+$user_id = $u["id"];
 
-    $nama = mysqli_real_escape_string($conn, $_POST["nama"]);
-    $komentar = mysqli_real_escape_string($conn, $_POST["komentar"]);
-    $user_id = $_SESSION["user_id"] ?? 0;
 
     $gambar = "";
 
@@ -98,34 +101,48 @@ $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id O
     </div>
 </nav>
 
-<div class="container py-5">
+<div class="detail-wrapper py-5">
 
-    <div class="row mb-5">
-<div class="col-md-4 book-cover">
-    <img src="assets/<?= $buku['gambar'] ?>" class="img-fluid rounded shadow">
-</div>
+<div class="detail-wrapper">
 
+    <div class="detail-container">
+        
+        <!-- COVER -->
+        <div class="detail-image">
+            <img src="assets/<?= $buku['gambar'] ?>" 
+                 alt="<?= $buku['judul'] ?>"
+                 class="img-fluid rounded shadow">
+        </div>
 
-        <div class="col-md-8">
-            <h1 class="fw-bold"><?= $buku["judul"] ?></h1>
+        <!-- INFO -->
+        <div class="detail-content">
+            <h1 class="fw-bold mb-3"><?= $buku["judul"] ?></h1>
 
             <?php if (!empty($buku["penulis"])): ?>
-                <p class="text-muted">Penulis: <?= $buku["penulis"] ?></p>
+                <p class="text-muted mb-1"><strong>Penulis:</strong> <?= $buku["penulis"] ?></p>
             <?php endif; ?>
 
             <?php if (!empty($buku["genre"])): ?>
-                <p><b>Genre:</b> <?= $buku["genre"] ?></p>
+                <p class="mb-3"><strong>Genre:</strong> <?= $buku["genre"] ?></p>
             <?php endif; ?>
 
-            <p class="mt-4 text-justify"><?= nl2br($buku["deskripsi"]) ?></p>
+            <p class="mt-3 text-justify" style="line-height: 1.7;">
+                <?= nl2br($buku["deskripsi"]) ?>
+            </p>
         </div>
+
     </div>
+
+</div>
+
 
     <hr>
 
+    <!-- FORM REVIEW -->
     <h3 class="fw-bold mt-5 mb-3">Tambah Review</h3>
 
-    <form method="POST" enctype="multipart/form-data" class="row g-3 bg-white p-4 rounded shadow-sm">
+    <form method="POST" enctype="multipart/form-data" 
+          class="row g-3 bg-white p-4 rounded shadow-sm">
 
         <div class="col-md-4">
             <label class="form-label">Nama Pengguna</label>
@@ -147,96 +164,100 @@ $qReview = mysqli_query($conn, "SELECT * FROM reviews WHERE buku_id = $buku_id O
         </div>
     </form>
 
-
     <h3 class="fw-bold mt-5 mb-3">Review Pengguna</h3>
+
+
 
     <!-- ============================================
          DESKTOP: TABEL HANYA MUNCUL JIKA BUKAN MOBILE
     ============================================= -->
-    <?php if (!$isMobile): ?>
-    <table class="table table-striped review-table">
-        <thead class="table-dark">
-            <tr>
-                <th>Nama</th>
-                <th>Foto</th>
-                <th>Komentar</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
+<?php if (!$isMobile): ?>
+<div class="review-container" style="width:95%; margin:0 auto;">
 
-        <tbody>
+<table class="review-table">
+    <thead>
+        <tr>
+            <th style="width:150px;">Nama</th>
+            <th style="width:180px;">Foto</th>
+            <th>Komentar</th>
+            <th style="width:120px;">Aksi</th>
+        </tr>
+    </thead>
 
-        <?php if (mysqli_num_rows($qReview) === 0): ?>
-            <tr>
-                <td colspan="4" class="text-center text-muted">Belum ada review</td>
-            </tr>
-        <?php else: ?>
-
-            <?php while ($r = mysqli_fetch_assoc($qReview)): ?>
-            <tr>
-                <td><?= $r["nama"] ?></td>
-
-                <td>
-                    <?php if ($r["gambar"]): ?>
-                        <img src="uploads/<?= $r['gambar'] ?>" width="120" class="rounded">
-                    <?php else: ?>
-                        <span class="text-muted">-</span>
-                    <?php endif; ?>
-                </td>
-
-                <td class="text-justify"><?= nl2br($r["komentar"]) ?></td>
-
-                <td>
-                    <a href="edit_review.php?id=<?= $r['id'] ?>&buku_id=<?= $buku['id'] ?>" 
-                        class="btn btn-sm btn-warning">Edit</a>
-
-                    <a href="delete_review.php?id=<?= $r['id'] ?>&buku_id=<?= $buku['id'] ?>&from=detail"
-                        class="btn btn-sm btn-danger"
-                        onclick="return confirm('Hapus review ini?')">Delete</a>
-                </td>
-            </tr>
-            <?php endwhile; ?>
-
-        <?php endif; ?>
-
-        </tbody>
-    </table>
-    <?php endif; ?>
-
-
-    <!-- ============================================
-         MOBILE VIEW (CARD) HANYA MUNCUL JIKA MOBILE
-    ============================================= -->
-    <?php if ($isMobile): ?>
-    <?php mysqli_data_seek($qReview, 0); ?>
-
+    <tbody>
     <?php while ($r = mysqli_fetch_assoc($qReview)): ?>
-    <div class="review-card">
+        <tr>
 
-        <h6 class="fw-bold"><?= $r["nama"] ?></h6>
+            <!-- NAMA -->
+            <td><?= $r["nama"] ?></td>
 
-        <?php if ($r["gambar"]): ?>
-            <img src="uploads/<?= $r['gambar'] ?>" class="review-img mb-2">
-        <?php endif; ?>
+            <!-- FOTO MINI -->
+            <td>
+                <?php if ($r["gambar"]): ?>
+                    <img src="uploads/<?= $r['gambar'] ?>" 
+                         class="review-img-mini"
+                         style="width:140px; border-radius:8px;">
+                <?php else: ?>
+                    <span class="text-muted">-</span>
+                <?php endif; ?>
+            </td>
 
-        <p class="text-justify"><?= nl2br($r["komentar"]) ?></p>
+            <!-- KOMENTAR -->
+            <td class="text-justify" style="line-height:1.6;">
+                <?= nl2br($r["komentar"]) ?>
+            </td>
 
-        <div class="review-actions">
-            <a href="edit_review.php?id=<?= $r['id'] ?>&buku_id=<?= $buku['id'] ?>"
-               class="btn btn-warning btn-sm">Edit</a>
+            <!-- TOMBOL -->
+            <td class="action-col" style="text-align:center;">
+                <a href="edit_review.php?id=<?= $r['id'] ?>&buku_id=<?= $buku['id'] ?>"
+                   class="btn btn-warning btn-sm mb-2 w-100">Edit</a>
 
-            <a href="delete_review.php?id=<?= $r['id'] ?>&buku_id=<?= $buku['id'] ?>&from=detail"
-               onclick="return confirm('Hapus review ini?')"
-               class="btn btn-danger btn-sm">Delete</a>
-        </div>
+                <a href="delete_review.php?id=<?= $r['id'] ?>&buku_id=<?= $buku['id'] ?>&from=detail"
+                   class="btn btn-danger btn-sm w-100"
+                   onclick="return confirm('Hapus review ini?')">Delete</a>
+            </td>
 
-    </div>
+        </tr>
     <?php endwhile; ?>
-    <?php endif; ?>
+    </tbody>
+</table>
 
 </div>
+<?php endif; ?>
+
+
+<!-- ============================================
+     MOBILE VIEW (CARD) — hanya muncul di HP
+============================================= -->
+<?php if ($isMobile): ?>
+<?php mysqli_data_seek($qReview, 0); ?>
+
+<?php while ($r = mysqli_fetch_assoc($qReview)): ?>
+<div class="review-card">
+
+    <h6 class="fw-bold"><?= $r["nama"] ?></h6>
+
+    <?php if ($r["gambar"]): ?>
+        <img src="uploads/<?= $r['gambar'] ?>" class="review-img mb-2">
+    <?php endif; ?>
+
+    <p class="text-justify"><?= nl2br($r["komentar"]) ?></p>
+
+    <div class="review-actions">
+        <a href="edit_review.php?id=<?= $r['id'] ?>&buku_id=<?= $buku['id'] ?>"
+           class="btn btn-warning btn-sm">Edit</a>
+
+        <a href="delete_review.php?id=<?= $r['id'] ?>&buku_id=<?= $buku['id'] ?>&from=detail"
+           onclick="return confirm('Hapus review ini?')"
+           class="btn btn-danger btn-sm">Delete</a>
+    </div>
+
+</div>
+<?php endwhile; ?>
+<?php endif; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
+

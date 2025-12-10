@@ -147,9 +147,73 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin") {
 </table>
 <?php endif; ?>
 
+<!-- ===============================
+     MOBILE CARD VIEW (TAMBAHAN)
+================================ -->
+<?php if ($isMobile): ?>
+<div class="container mt-3">
 
+    <?php 
+    mysqli_data_seek($result, 0); 
+    while ($r = mysqli_fetch_assoc($result)): 
+    ?>
+    
+    <div class="card shadow-sm mb-4" style="border-radius: 12px;">
+
+        <div class="card-body">
+
+            <!-- Judul Buku -->
+            <h5 class="card-title fw-bold mb-2 text-center">
+                <?= $r['judul'] ?>
+            </h5>
+
+            <!-- Nama User -->
+            <p class="text-muted small mb-3 text-center">
+                <strong>User:</strong> <?= $r["username"] ?? "-" ?>
+            </p>
+
+            <!-- Gambar -->
+            <?php if (!empty($r["gambar"])): ?>
+                <div class="text-center mb-3">
+                    <img src="uploads/<?= $r['gambar'] ?>" 
+                        class="img-fluid rounded"
+                        style="max-width: 70%; border-radius: 10px;">
+                </div>
+            <?php endif; ?>
+
+            <!-- Komentar -->
+            <p class="text-justify mb-3" style="font-size: 14px; line-height: 1.5;">
+                <?= nl2br($r['komentar']) ?>
+            </p>
+
+            <!-- Tanggal -->
+            <p class="text-muted small mb-3 text-center">
+                <?= $r['created_at'] ?>
+            </p>
+
+            <!-- Tombol Aksi -->
+            <div class="d-grid gap-2">
+                <a href="edit_review.php?id=<?= $r['id'] ?>" 
+                    class="btn btn-warning btn-sm text-white fw-bold">
+                    Edit
+                </a>
+
+                <a href="delete_review.php?id=<?= $r['id'] ?>&from=riwayat"
+                    onclick="return confirm('Hapus komentar ini?')"
+                    class="btn btn-danger btn-sm fw-bold">
+                    Hapus
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <?php endwhile; ?>
 
 </div>
+<?php endif; ?>
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
